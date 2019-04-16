@@ -2,6 +2,8 @@ import pygame
 from pygamegame import *
 from Board import *
 from Player import *
+from Tiles import *
+import utility
 
 class Game(PygameGame):
     def init(self):
@@ -13,6 +15,13 @@ class Game(PygameGame):
         self.board = Board(5, self.player)
 
     def mousePressed(self, x, y):
+        pass
+        #if(click on a tile):
+            ##elf.
+
+
+
+
         self.player.move(self, x, y)
         #print(screenCenterX, self.player.rect.centerx)
         self.player.move(screenCenterX, screenCenterY, x, y)
@@ -22,9 +31,10 @@ class Game(PygameGame):
     def timerFired(self, dt):
         pass
 
-
     def redrawAll(self, screen):
         self.board.draw(screen)
+        utility.helloWorld()
+
 
 game = Game()
 game.run()
