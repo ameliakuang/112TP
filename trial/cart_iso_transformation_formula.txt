@@ -1,0 +1,9 @@
+From http://clintbellanger.net/articles/isometric_math/
+
+From row, col to iso_x, iso_y (coordinates in the isometric map with origin at the top)
+iso_x = (row-col)*TILE_WIDTH_HALF
+iso_y = (row+col)*TILE_HEIGHT_HALF/2
+
+From iso_x, iso_y to row, col (coordinates )
+row = (iso_x / TILE_WIDTH_HALF + iso_y / TILE_HEIGHT_HALF) /2
+col = (iso_y / TILE_HEIGHT_HALF -(iso_x / TILE_WIDTH_HALF)) /2

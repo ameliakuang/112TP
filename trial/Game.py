@@ -6,12 +6,14 @@ from Player import *
 class Game(PygameGame):
     def init(self):
         self.bgColor = (220, 129, 0)
+
         self.player = Player()
+        self.playerGroup = pygame.sprite.GroupSingle(self.player)
+        
         self.board = Board(5, self.player)
 
     def mousePressed(self, x, y):
-        screenCenterX = self.width//2
-        screenCenterY = self.height//2
+        self.player.move(self, x, y)
         #print(screenCenterX, self.player.rect.centerx)
         self.player.move(screenCenterX, screenCenterY, x, y)
         self.board = Board(5, self.player)
