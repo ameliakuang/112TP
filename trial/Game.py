@@ -33,7 +33,7 @@ class Game(PygameGame):
 
     def redrawAll(self, screen):
         self.board.draw(screen)
-        utility.helloWorld()
+        #utility.helloWorld()
 
 
 game = Game()

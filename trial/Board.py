@@ -48,10 +48,10 @@ class Board(object):
                 # CITATION: the conversion from cartesian coordinates to isometric coordinates
                 # is from https://opengameart.org/content/cannonball
                 
-                # cart_x, cart_y: square map's row and col coordinates
+                # cart_x, cart_y: square map's row and col 
                 cart_x = row * self.halfTileWidth
                 cart_y = col * self.halfTileHeight
-                # iso_x, iso_y: isometric map's row and col coordinates
+                # iso_x, iso_y: isometric map's x and y coordinates
                 iso_x = (cart_x - cart_y) 
                 iso_y = (cart_x + cart_y)/2
                 
@@ -60,7 +60,7 @@ class Board(object):
                 # iso_y = ((row+col)*self.halfTileHeight)//2
 
                 centered_x = screen.get_rect().centerx + iso_x
-                centered_y = screen.get_rect().centery + iso_y
+                centered_y = screen.get_rect().centery//2 + iso_y
                 #pygame.draw.rect(screen, (0, 100, 0), (centered_x, centered_y, self.tileWidth, self.tileHeight))
                 screen.blit(tile, (centered_x, centered_y))
         screen.blit(self.playerTile, (300, 100))
