@@ -16,6 +16,8 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
+
+
 class DireTile(Tile):
 	def __init__(self, dire):
 		self.image = pygame.image.load('images/tiles/dire'+str(dire)+".png").convert_alpha()
@@ -24,6 +26,11 @@ class DireTile(Tile):
 class PortalTile(Tile):
 	def __init__(self):
 		self.image = pygame.image.load('images/tiles/portal.png').convert_alpha()
+		self.rect = self.image.get_rect()
+
+class TargetTile(Tile):
+	def __init__(self):
+		self.image = pygame.image.load('images/tiles/target.png').convert_alpha()
 		self.rect = self.image.get_rect()
 
 
