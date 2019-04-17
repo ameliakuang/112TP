@@ -18,7 +18,7 @@ class Game(PygameGame):
     def mousePressed(self, x, y):
         pass
         
-
+        
     def timerFired(self, dt):
         pass
 

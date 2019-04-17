@@ -22,7 +22,7 @@ class DireTile(Tile):
 		self.rect = self.image.get_rect()
 
 class PortalTile(Tile):
-	def __init__(self, dire):
+	def __init__(self):
 		self.image = pygame.image.load('images/tiles/portal.png').convert_alpha()
 		self.rect = self.image.get_rect()
 
