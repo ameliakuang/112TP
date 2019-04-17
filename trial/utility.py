@@ -4,7 +4,7 @@ def mapToIso(row, col, halfWidth, halfHeight):
     return (iso_x, iso_y)
     
 
-def isoToMap(x, y, halfWidth, halfHeight):
+def isoToMap(iso_x, iso_y, halfWidth, halfHeight):
     row = x / halfWidth + y / halfHeight
     col = y / halfHeight*2 - x / halfWidth*2
     return (row, col)

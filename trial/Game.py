@@ -7,7 +7,7 @@ import utility
 
 class Game(PygameGame):
     def init(self):
-        self.bgColor = (220, 129, 0)
+        self.bgColor = (247, 202, 201)
 
         self.player = Player()
         self.playerGroup = pygame.sprite.GroupSingle(self.player)

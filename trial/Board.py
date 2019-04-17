@@ -37,10 +37,13 @@ class Board(object):
             [0, 0, 1, 2, 3],
             [4, -1, 0, 0, 0],
             [0, 0, 5, 6, 0],
-            [0, 0, 5, 7, 0],
+            [0, 0, 0, 7, 0],
             [0, 0, 0, 0, 0],
             ]    
         return board
+
+
+
     @staticmethod
     def generateControlBar(board):
         for row in range(len(board)):
@@ -54,40 +57,44 @@ class Board(object):
 
 
     def draw(self, screen):
-        for level in range(2):
-            for row in range(len(self.board)):
-                for col in range(len(self.board[0])):
-                    num = self.board[row][col]
-                    # the player position and normal grids
-                    if(num == -1) or (num == 0):
-                        tile = Tile()
-                        tileImage = tile.image
-                        iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                        centered_x = screen.get_rect().centerx + iso_x
-                        centered_y = screen.get_rect().centery//2 + iso_y-level*10
-                        screen.blit(tileImage, (centered_x, centered_y))
-                    elif(num in range(1,4)):
-                        tile = DireTile(num)
-                        tileImage = tile.image
-                        iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                        centered_x = screen.get_rect().centerx + iso_x
-                        centered_y = screen.get_rect().centery//2 + iso_y-level*10
-                        screen.blit(tileImage, (centered_x, centered_y))
-                    elif(num == 5):
-                        tile = PortalTile()
-                        tileImage = tile.image
-                        iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                        centered_x = screen.get_rect().centerx + iso_x
-                        centered_y = screen.get_rect().centery//2 + iso_y-level*10
-                        screen.blit(tileImage, (centered_x, centered_y))
-                    else:
-                        continue
+        for row in range(len(self.board)):
+            for col in range(len(self.board[0])):
+                num = self.board[row][col]
+                # the player position and normal grids
+                if(num == -1) or (num == 0):
+                    tile = Tile()
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
+                    centered_x = screen.get_rect().centerx + iso_x
+                    centered_y = screen.get_rect().centery//2 + iso_y
+                    screen.blit(tileImage, (centered_x, centered_y))
+                elif(num in range(1,4)):
+                    tile = DireTile(num)
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
+                    centered_x = screen.get_rect().centerx + iso_x
+                    centered_y = screen.get_rect().centery//2 + iso_y
+                    screen.blit(tileImage, (centered_x, centered_y))
+                elif(num == 5):
+                    tile = PortalTile()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
+                    centered_x = screen.get_rect().centerx + iso_x
+                    centered_y = screen.get_rect().centery//2 + iso_y
+                    
+                    pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
+                    screen.blit(tileImage, (centered_x, centered_y))
+                else:
+                    continue
 
-        iso_x, iso_y = utility.mapToIso(3, 1, self.halfTileWidth, self.halfTileHeight)
+        iso_x, iso_y = utility.mapToIso(1, 1, self.halfTileWidth, self.halfTileHeight)
         centered_x = screen.get_rect().centerx + iso_x
         centered_y = screen.get_rect().centery//2 + iso_y
         playerGroup = pygame.sprite.GroupSingle(self.player)
-        self.player.rect.centerx, self.player.rect.centery = centered_x, centered_y-20
+        self.player.rect.x, self.player.rect.y = centered_x, centered_y-10
+        #pygame.draw.rect(screen, (255,255,0), self.player.rect)
+        #pygame.self.player.image.set_colorkey((255,255,255))
         playerGroup.draw(screen)
         
         
