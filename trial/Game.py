@@ -15,16 +15,21 @@ class Game(PygameGame):
         self.board = Board(5, self.player)
 
 
+    # move the tiles onto the board
+    def mouseDrag(self, x, y):
+        pass
+
+    # click on the game icon
     def mousePressed(self, x, y):
         pass
         
-        
+
     def timerFired(self, dt):
         pass
 
     def redrawAll(self, screen):
         self.board.draw(screen)
-        #utility.helloWorld()
+        
 
 
 game = Game()

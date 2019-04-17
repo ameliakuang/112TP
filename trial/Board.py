@@ -8,6 +8,7 @@ class Board(object):
     def __init__(self, n, player):
         self.rows = self.cols = n
         self.board = Board.generateBoard(n)
+        self.controlBar = Board.generateControlBar(self.board)
         self.player = player
 
         self.tileWidth = 72
@@ -32,20 +33,21 @@ class Board(object):
     @staticmethod
     def generateBoard(n):
         board = [
-            [-1, 0, 1, 2, 3],
-            [4, 0, 0, 0, 0],
+            [0, 0, 1, 2, 3],
+            [4, -1, 0, 0, 0],
             [0, 0, 5, 6, 0],
             [0, 0, 5, 7, 0],
             [0, 0, 0, 0, 0],
             ]    
         return board
-
-    def generateControlBar(self.board):
-        for row in range(len(self.board)):
-            for col in range(len(self.board[0])):
-                num = self.board[row][col]
+    @staticmethod
+    def generateControlBar(board):
+        for row in range(len(board)):
+            for col in range(len(board[0])):
+                num = board[row][col]
                 if num != -1 or num != 0:
-                    
+                    pass
+
 
 
 
@@ -79,12 +81,13 @@ class Board(object):
                 else:
                     continue
 
-        iso_x, iso_y = utility.mapToIso(0, 0, self.halfTileWidth, self.halfTileHeight)
+        iso_x, iso_y = utility.mapToIso(1, 1, 25, 25)
         centered_x = screen.get_rect().centerx + iso_x
         centered_y = screen.get_rect().centery//2 + iso_y
         playerGroup = pygame.sprite.GroupSingle(self.player)
-        self.player.rect.x, self.player.rect.y = centered_x, centered_y
+        self.player.rect.x, self.player.rect.y = centered_x+11, centered_y-8
         playerGroup.draw(screen)
+        
         
 
 
