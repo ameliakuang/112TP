@@ -39,12 +39,13 @@ class Board(object):
             [0, 0, 0, 0, 0],
             ]    
         return board
-        
+
     def generateControlBar(self.board):
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 num = self.board[row][col]
                 if num != -1 or num != 0:
+                    
 
 
 
