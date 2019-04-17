@@ -7,8 +7,6 @@ class Board(object):
     def __init__(self, n, player):
         self.rows = self.cols = n
         self.board = Board.generateBoard(n)
-        self.tile0 = pygame.image.load('images/tiles/normal.png').convert_alpha()
-        self.tile1 = pygame.image.load('images/tiles/cube.png').convert_alpha()
         self.playerTile = player.image
         
         self.tileWidth = 64
@@ -23,7 +21,7 @@ class Board(object):
     @staticmethod
     def generateBoard(n):
         board = [
-            [0, 0, 0, 0, 0],
+            [-1, 0, 0, 0, 0],
             [0, 0, 0, 0, 1],
             [0, 0, 0, 1, 0],
             [0, 0, 0, 10, 0],
@@ -37,8 +35,10 @@ class Board(object):
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 num = self.board[row][col]
-                if(num == 0):
-                    tile = self.tile0
+                # the player position
+                if(num == -1):
+                    num = 0 # just place a normal tile there
+                    
                 elif(num == 10):
                     continue
                 elif(num == 12):

@@ -13,6 +13,7 @@ class Game(PygameGame):
         self.playerGroup = pygame.sprite.GroupSingle(self.player)
         
         self.board = Board(5, self.player)
+        
 
     def mousePressed(self, x, y):
         pass
