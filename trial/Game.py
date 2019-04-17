@@ -13,21 +13,11 @@ class Game(PygameGame):
         self.playerGroup = pygame.sprite.GroupSingle(self.player)
         
         self.board = Board(5, self.player)
-        
+
 
     def mousePressed(self, x, y):
         pass
-        #if(click on a tile):
-            ##elf.
-
-
-
-
-        self.player.move(self, x, y)
-        #print(screenCenterX, self.player.rect.centerx)
-        self.player.move(screenCenterX, screenCenterY, x, y)
-        self.board = Board(5, self.player)
-        #print(self.player.rect.centerx)
+        
 
     def timerFired(self, dt):
         pass

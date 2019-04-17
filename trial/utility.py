@@ -1,5 +1,10 @@
-def mapToIso(row, col):
-    print("hello")
+def mapToIso(row, col, halfWidth, halfHeight):
+    iso_x = (row*halfWidth - col * halfHeight)
+    iso_y = (row*halfWidth + col*halfHeight)/2
+    return (iso_x, iso_y)
+    
 
-def isoToMap(x, y):
-    pass
+def isoToMap(x, y, halfWidth, halfHeight):
+    row = x / halfWidth + y / halfHeight
+    col = y / halfHeight*2 - x / halfWidth*2
+    return (row, col)
