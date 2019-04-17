@@ -1,5 +1,5 @@
 def mapToIso(row, col):
-    pass
+    print("hello")
 
 def isoToMap(x, y):
     pass
