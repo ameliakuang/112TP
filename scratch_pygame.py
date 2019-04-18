@@ -10,6 +10,10 @@
 8：target tiles
 '''
 
+def solve(board):
+	
+
+
 def generateBoard(n):
     board = [ [ None ] * n for row in range(n)]
     board[0][0] = -1
