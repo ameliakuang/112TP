@@ -16,7 +16,7 @@ class Game(PygameGame):
 
 
     # move the tiles onto the board
-    def mouseDrag(self, x, y):
+    def keyPressed(self, x, y):
         pass
 
     # click on the game icon
@@ -29,6 +29,7 @@ class Game(PygameGame):
 
     def redrawAll(self, screen):
         self.board.draw(screen)
+
         
 
 

@@ -83,7 +83,7 @@ class Board(object):
                     centered_x = screen.get_rect().centerx + iso_x
                     centered_y = screen.get_rect().centery//2 + iso_y
                     
-                    pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
+                    #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
                     screen.blit(tileImage, (centered_x, centered_y))
                 else:
                     continue
@@ -92,10 +92,10 @@ class Board(object):
         centered_x = screen.get_rect().centerx + iso_x
         centered_y = screen.get_rect().centery//2 + iso_y
         playerGroup = pygame.sprite.GroupSingle(self.player)
+        # centered_y-10 to makes the player looks like higher than the board
         self.player.rect.x, self.player.rect.y = centered_x, centered_y-10
         self.player.image.set_colorkey((255,255,255))
-        #pygame.draw.rect(screen, (255,255,0), self.player.rect)
-        #pygame.self.player.image.set_colorkey((255,255,255))
+        #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, 70, 44))
         screen.blit(self.player.image, (self.player.rect.x,self.player.rect.y))
         
         

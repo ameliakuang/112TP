@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         centered_y = screenCenterY/2 + iso_y
         self.rect.centerx = centered_x
         self.rect.centery = centered_y
+    
 
 
 
