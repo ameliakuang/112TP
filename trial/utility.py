@@ -2,6 +2,7 @@ def mapToIso(row, col, halfWidth, halfHeight):
     iso_x = (row*halfWidth - col * halfHeight)
     iso_y = (row*halfWidth + col*halfHeight)/2
     return (iso_x, iso_y)
+    #change
     
 
 def isoToMap(iso_x, iso_y, halfWidth, halfHeight):
