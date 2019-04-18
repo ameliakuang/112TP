@@ -11,8 +11,8 @@ class Board(object):
         #self.controlBar = Board.generateControlBar(self.board)
         self.player = player
 
-        self.tileWidth = 72
-        self.tileHeight = 72
+        self.tileWidth = 70
+        self.tileHeight = 70
         self.halfTileWidth = self.tileWidth//2
         self.halfTileHeight = self.tileHeight//2
         
@@ -39,8 +39,8 @@ class Board(object):
         #solution = solve(board)
         #if solution != None:
             #pass
-        return [[1, 0, 0],
-                [0, 0, 0],
+        return [[1, 8, 0],
+                [0, 0, 5],
                 [0, 0, 0]
                 ]
 
@@ -84,8 +84,8 @@ class Board(object):
                     iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
                     centered_x = screen.get_rect().centerx + iso_x
                     centered_y = screen.get_rect().centery//2 + iso_y
-                    
-                    #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
+                    #print(tileRect[2], tileRect[3])
+                    pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
                     screen.blit(tileImage, (centered_x, centered_y))
                 else:
                     continue

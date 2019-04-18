@@ -14,8 +14,8 @@ class Tile(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/tiles/normal.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = 10
-        self.rect.y = 400-85
+        # self.rect.x = 10
+        # self.rect.y = 400-85
         
 
     def draw(self, screen):
@@ -25,15 +25,15 @@ class DireTile(Tile):
     def __init__(self, dire):
         self.image = pygame.image.load('images/tiles/dire'+str(dire)+".png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.x = 10+80*dire
-        self.rect.y = 400-85
+        # self.rect.x = 10+80*dire
+        # self.rect.y = 400-85
 
 class PortalTile(Tile):
     def __init__(self):
         self.image = pygame.image.load('images/tiles/portal.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect = 10+80*5
-        self.rect.y = 400-85
+        # self.rect = 10+80*5
+        # self.rect.y = 400-85
 
 class TargetTile(Tile):
     def __init__(self):
