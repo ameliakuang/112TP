@@ -36,10 +36,14 @@ class Board(object):
     def generateBoard(n):
         board = [ [ None ] * n for row in range(n)]
         board[0][0] = -1
-        solution = solve(board)
-        if solution != None:
-            return solution
-        return None
+        #solution = solve(board)
+        #if solution != None:
+            #pass
+        return [[0,0,-1,0,0],
+                [2,3,0,0,0],
+                [2,3,0,0,0],
+                [4,5,1,0,0],
+                [0,0,0,0,0]]
 
 
 
@@ -87,7 +91,7 @@ class Board(object):
                 else:
                     continue
 
-        iso_x, iso_y = utility.mapToIso(1, 1, self.halfTileWidth, self.halfTileHeight)
+        iso_x, iso_y = utility.mapToIso(2, 4, self.halfTileWidth, self.halfTileHeight)
         centered_x = screen.get_rect().centerx + iso_x
         centered_y = screen.get_rect().centery//2 + iso_y
         playerGroup = pygame.sprite.GroupSingle(self.player)
