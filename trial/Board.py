@@ -15,7 +15,8 @@ class Board(object):
         self.tileHeight = 72
         self.halfTileWidth = self.tileWidth//2
         self.halfTileHeight = self.tileHeight//2
-
+        
+        # Group for the generated tiles
         self.options = pygame.sprite.Group()
 
 
@@ -33,14 +34,12 @@ class Board(object):
     '''
     @staticmethod
     def generateBoard(n):
-        board = [
-            [0, 0, 1, 2, 3],
-            [4, -1, 0, 0, 0],
-            [0, 0, 5, 6, 0],
-            [0, 0, 0, 7, 0],
-            [0, 0, 0, 0, 0],
-            ]    
-        return board
+        board = [ [ None ] * n for row in range(n)]
+        board[0][0] = -1
+        solution = solve(board)
+        if solution != None:
+            return solution
+        return None
 
 
 
