@@ -3,6 +3,7 @@ from pygamegame import *
 from Board import *
 from Player import *
 from Tiles import *
+from Control import *
 import utility
 
 class Game(PygameGame):
@@ -14,21 +15,29 @@ class Game(PygameGame):
         
         self.board = Board(5, self.player)
 
+        # Control
+        self.begin = Begin(self.width, self.height)
+        self.beginMoving = False
+
+        self.controlBar = controlBar(self.width, self.height)
+
 
     # move the tiles onto the board
-    def keyPressed(self, x, y):
+    def keyPressed(self, keyCode, modifier):
         pass
 
     # click on the game icon
     def mousePressed(self, x, y):
         pass
-        
 
     def timerFired(self, dt):
-        pass
+        if self.beginMoving:
+            self.playerGroup.move(self.board)
 
     def redrawAll(self, screen):
         self.board.draw(screen)
+        self.controlBar.draw(screen)
+        self.begin.draw(screen)
 
         
 

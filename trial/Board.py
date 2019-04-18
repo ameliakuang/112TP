@@ -7,8 +7,8 @@ import utility
 class Board(object):
     def __init__(self, n, player):
         self.rows = self.cols = n
-        self.board = Board.generateBoard(n)
-        self.controlBar = Board.generateControlBar(self.board)
+        self.board = Board.generateBoard(3)
+        #self.controlBar = Board.generateControlBar(self.board)
         self.player = player
 
         self.tileWidth = 72
@@ -39,11 +39,10 @@ class Board(object):
         #solution = solve(board)
         #if solution != None:
             #pass
-        return [[0,0,-1,0,0],
-                [2,3,0,0,0],
-                [2,3,0,0,0],
-                [4,5,1,0,0],
-                [0,0,0,0,0]]
+        return [[1, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
+                ]
 
 
 
@@ -91,7 +90,7 @@ class Board(object):
                 else:
                     continue
 
-        iso_x, iso_y = utility.mapToIso(2, 4, self.halfTileWidth, self.halfTileHeight)
+        iso_x, iso_y = utility.mapToIso(self.player.row, self.player.col, self.halfTileWidth, self.halfTileHeight)
         centered_x = screen.get_rect().centerx + iso_x
         centered_y = screen.get_rect().centery//2 + iso_y
         playerGroup = pygame.sprite.GroupSingle(self.player)
