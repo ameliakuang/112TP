@@ -93,9 +93,10 @@ class Board(object):
         centered_y = screen.get_rect().centery//2 + iso_y
         playerGroup = pygame.sprite.GroupSingle(self.player)
         self.player.rect.x, self.player.rect.y = centered_x, centered_y-10
+        self.player.image.set_colorkey((255,255,255))
         #pygame.draw.rect(screen, (255,255,0), self.player.rect)
         #pygame.self.player.image.set_colorkey((255,255,255))
-        playerGroup.draw(screen)
+        screen.blit(self.player.image, (self.player.rect.x,self.player.rect.y))
         
         
 
