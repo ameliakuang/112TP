@@ -2,9 +2,11 @@ import pygame
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
+        super(Player, self).__init__()
+        #pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/circle.png').convert()
         self.rect = self.image.get_rect()
+        self.beginMoving = False
         self.row = 0
         self.col = 0
         self.drow = 0
@@ -24,7 +26,8 @@ class Player(pygame.sprite.Sprite):
         cols = len(board[0])
 
 
-    def move(self, board):
+    def update(self, board):
+        print("here")
         illegal = False
 
         row, col = self.row, self.col

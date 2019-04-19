@@ -9,16 +9,15 @@ class Control(pygame.sprite.Sprite):
 
 class Begin(Control):
     def __init__(self, screenWidth, screenHeight):
-        self.image = pygame.image.load('images/icons/right.png').convert_alpha()
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('images/icons/begin.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.centerx = screenWidth-80
-        self.rect.centery = screenHeight-90
-
-    def draw(self, screen):
-        screen.blit(self.image, (self.rect.centerx, self.rect.centery))
+        #print(self.rect.x, self.rect.y)
+        self.rect.x, self.rect.y = screenWidth-120, screenHeight-120
 
 class controlBar(Control):
     def __init__(self, screenWidth, screenHeight):
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((screenWidth-100, 250))
         self.image.fill((255, 255, 255))
         self.rect = self.image.get_rect()

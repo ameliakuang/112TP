@@ -39,10 +39,11 @@ class Board(object):
         #solution = solve(board)
         #if solution != None:
             #pass
-        return [[-1, 8, 0],
-                [0, 0, 5],
-                [0, 0, 0]
-                ]
+        return [[-1, 8, 0,0,0],
+                [0, 0, 5,0,0],
+                [0, 0, 0,0,0],
+                [0, 8, 0,0,0],
+                [0, 0, 5,0,0]]
 
 
 

@@ -15,7 +15,10 @@ class Game(PygameGame):
         self.player = Player()
         self.playerGroup = pygame.sprite.GroupSingle(self.player)
         # Board
-        self.board = Board(5, self.player)
+        ## self.boardObject is an object of the class Board
+        ## self.board is the 2d list representation of the board object
+        self.boardObject = Board(5, self.player)
+        self.board = self.boardObject.board
 
         # Control
         self.begin = Begin(self.width, self.height)
@@ -23,24 +26,25 @@ class Game(PygameGame):
 
         self.controlBar = controlBar(self.width, self.height)
 
-
     # move the tiles onto the board
     def keyPressed(self, keyCode, modifier):
         pass
 
     # click on the game icon and the ball can move
     def mousePressed(self, x, y):
-        pass
-        
+        pos = (x, y)
+        if(self.beginRect.collidepoint(pos)):
+            self.player.beginMoving = True
+
     # move the ball
     def timerFired(self, dt):
-        if self.beginMoving:
-            self.playerGroup.move(self.board)
+        if self.player.beginMoving:
+            self.playerGroup.update(self.board)
 
     def redrawAll(self, screen):
-        self.board.draw(screen)
+        self.boardObject.draw(screen)
         self.controlBar.draw(screen, self.width, self.height)
-        self.begin.draw(screen)
+        self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
 
 
 game = Game()
