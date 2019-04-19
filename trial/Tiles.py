@@ -12,7 +12,7 @@ import utility
 class Tile(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        super(Tile, self).__init__()
+        #super(Tile, self).__init__()
         self.image = pygame.image.load('images/tiles/normal.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.type = 0
@@ -33,7 +33,6 @@ class PortalTile(Tile):
         self.rect = self.image.get_rect()
         self.type = 5
 
-# add a class for jump tiles
 
 class TargetTile(Tile):
     def __init__(self):

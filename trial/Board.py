@@ -43,7 +43,7 @@ class Board(object):
                 [0, 0, 5,0,0],
                 [0, 0, 0,0,0],
                 [0, 8, 0,0,0],
-                [0, 0, 5,0,0]]
+                [3, 0, 5,0,0]]
 
 
 
@@ -71,7 +71,7 @@ class Board(object):
                     centered_x = screen.get_rect().centerx + iso_x
                     centered_y = screen.get_rect().centery//2 + iso_y
                     screen.blit(tileImage, (centered_x, centered_y))
-                elif(num in range(1,4)):
+                elif(num in range(1,5)):
                     tile = DireTile(num)
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
@@ -86,6 +86,13 @@ class Board(object):
                     centered_x = screen.get_rect().centerx + iso_x
                     centered_y = screen.get_rect().centery//2 + iso_y
                     #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
+                    screen.blit(tileImage, (centered_x, centered_y))
+                elif(num == 8):
+                    tile = TargetTile()
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
+                    centered_x = screen.get_rect().centerx + iso_x
+                    centered_y = screen.get_rect().centery//2 + iso_y
                     screen.blit(tileImage, (centered_x, centered_y))
                 else:
                     continue

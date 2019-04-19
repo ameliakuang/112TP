@@ -36,11 +36,14 @@ class Player(pygame.sprite.Sprite):
             self.drow = 1
         # check for direction tiles
         elif(num == 1):
-            self.drow = 1
+            self.drow = 0
+            self.dcol = -1
         elif(num == 2):
-            self.drow = -1
+            self.drow = 0
+            self.dcol = -1
         elif(num == 3):
-            pass
+            self.drow = 0
+            self.dcol = 1 
 
         self.row += self.drow
         self.col += self.dcol
