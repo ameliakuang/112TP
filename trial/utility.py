@@ -22,7 +22,7 @@ def getTransformation(inv = False):
         trans = cv2.getAffineTransform(np.float32(dst), np.float32(src))
     return trans
 
-print(getTransformation())
+#print(getTransformation())
 
 
 

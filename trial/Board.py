@@ -39,7 +39,7 @@ class Board(object):
         #solution = solve(board)
         #if solution != None:
             #pass
-        return [[1, 8, 0],
+        return [[-1, 8, 0],
                 [0, 0, 5],
                 [0, 0, 0]
                 ]
@@ -84,8 +84,7 @@ class Board(object):
                     iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
                     centered_x = screen.get_rect().centerx + iso_x
                     centered_y = screen.get_rect().centery//2 + iso_y
-                    #print(tileRect[2], tileRect[3])
-                    pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
+                    #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
                     screen.blit(tileImage, (centered_x, centered_y))
                 else:
                     continue

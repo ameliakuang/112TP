@@ -20,7 +20,7 @@ class Begin(Control):
 
 class controlBar(Control):
     def __init__(self, screenWidth, screenHeight):
-        self.image = pygame.Surface((screenWidth//2, 90))
+        self.image = pygame.Surface((screenWidth-100, 250))
         self.image.fill((255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -34,9 +34,14 @@ class controlBar(Control):
         portalTile = PortalTile()
         self.tileOptions.add(portalTile)
 
-    def draw(self, screen):
+    def draw(self, screen, screenWidth, screenHeight):
         screen.blit(self.image, (self.rect.x, self.rect.y))
-        self.tileOptions.draw(screen)
+        for tile in self.tileOptions:
+            x, y = 10+80*tile.type, screenHeight-80
+            screen.blit(tile.image, (x, y))
+            
+
+
 
 
 

@@ -19,7 +19,7 @@ class Game(PygameGame):
         self.begin = Begin(self.width, self.height)
         self.beginMoving = False
 
-        #self.controlBar = controlBar(self.width, self.height)
+        self.controlBar = controlBar(self.width, self.height)
 
 
     # move the tiles onto the board
@@ -36,8 +36,8 @@ class Game(PygameGame):
 
     def redrawAll(self, screen):
         self.board.draw(screen)
-        #self.controlBar.draw(screen)
-        #self.begin.draw(screen)
+        self.controlBar.draw(screen, self.width, self.height)
+        self.begin.draw(screen)
 
         
 
