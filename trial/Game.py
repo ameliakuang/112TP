@@ -24,6 +24,11 @@ class Game(PygameGame):
         self.begin = Begin(self.width, self.height)
         self.beginMoving = False
 
+        self.reset = Reset(self.width, self.height)
+        self.resetState = False
+
+        self.menu = Menu(self.width, self.height)
+
         self.controlBar = controlBar(self.width, self.height)
 
     # move the tiles onto the board
@@ -35,6 +40,10 @@ class Game(PygameGame):
         pos = (x, y)
         if(self.beginRect.collidepoint(pos)):
             self.player.beginMoving = True
+        elif(self.resetRect.collidepoint(pos)):
+            self.resetState = True
+        elif(self.menuRect.collidepoint(pos)):
+            pass
 
     # move the ball
     def timerFired(self, dt):
@@ -45,7 +54,8 @@ class Game(PygameGame):
         self.boardObject.draw(screen)
         self.controlBar.draw(screen, self.width, self.height)
         self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
-
+        self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
+        self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
 
 game = Game()
 game.run()

@@ -15,6 +15,23 @@ class Begin(Control):
         #print(self.rect.x, self.rect.y)
         self.rect.x, self.rect.y = screenWidth-120, screenHeight-120
 
+class Reset(Control):
+    def __init__(self, screenWidth, screenHeight):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('images/icons/return.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        #print(self.rect.x, self.rect.y)
+        self.rect.x, self.rect.y = screenWidth-90, -20
+
+class Menu(Control):
+    def __init__(self, screenWidth, screenHeight):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('images/icons/menuList.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        #print(self.rect.x, self.rect.y)
+        self.rect.x, self.rect.y = -3, -10
+
+
 class controlBar(Control):
     def __init__(self, screenWidth, screenHeight):
         pygame.sprite.Sprite.__init__(self)
