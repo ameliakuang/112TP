@@ -15,7 +15,6 @@ class Begin(Control):
         self.rect.centery = screenHeight-90
 
     def draw(self, screen):
-        #pygame.draw.rect(screen, (0, 0, 0), (self.rect.centerx, self.rect.centery, 5,5))
         screen.blit(self.image, (self.rect.centerx, self.rect.centery))
 
 class controlBar(Control):
@@ -37,7 +36,7 @@ class controlBar(Control):
     def draw(self, screen, screenWidth, screenHeight):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         for tile in self.tileOptions:
-            x, y = 10+80*tile.type, screenHeight-80
+            x, y = 10+80*tile.type, screenHeight-70
             screen.blit(tile.image, (x, y))
             
 

@@ -8,11 +8,13 @@ import utility
 
 class Game(PygameGame):
     def init(self):
+        # Background color
         self.bgColor = (247, 202, 201)
 
+        # Player
         self.player = Player()
         self.playerGroup = pygame.sprite.GroupSingle(self.player)
-        
+        # Board
         self.board = Board(5, self.player)
 
         # Control
@@ -26,10 +28,11 @@ class Game(PygameGame):
     def keyPressed(self, keyCode, modifier):
         pass
 
-    # click on the game icon
+    # click on the game icon and the ball can move
     def mousePressed(self, x, y):
         pass
-
+        
+    # move the ball
     def timerFired(self, dt):
         if self.beginMoving:
             self.playerGroup.move(self.board)
@@ -38,8 +41,6 @@ class Game(PygameGame):
         self.board.draw(screen)
         self.controlBar.draw(screen, self.width, self.height)
         self.begin.draw(screen)
-
-        
 
 
 game = Game()
