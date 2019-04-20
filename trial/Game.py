@@ -8,7 +8,7 @@ import utility
 
 class Game(PygameGame):
     def init(self):
-        self.mode = "splashScreen"
+        self.mode = "help"
         # Background color
         self.bgColor = (247, 202, 201)
 
@@ -39,6 +39,8 @@ class Game(PygameGame):
             self.playGameKeyPressed(keyCode, modifier)
         elif (self.mode == "help"):       
             self.helpKeyPressed(keyCode, modifier)
+        elif (self.mode == "levelSelection"):
+            self.levelSelectionKeyPressed(keyCode, modifier)
 
     def mousePressed(self, x, y):
         if (self.mode == "splashScreen"): 
@@ -47,6 +49,8 @@ class Game(PygameGame):
             self.playGameMousePressed(x, y)
         elif (self.mode == "help"):       
             self.helpMousePressed(x, y)
+        elif (self.mode == "levelSelection"):
+            self.levelSelectionMousePressed(x,y)
 
     def timerFired(self, dt):
         if (self.mode == "splashScreen"): 
@@ -55,6 +59,8 @@ class Game(PygameGame):
             self.playGameTimerFired(dt)
         elif (self.mode == "help"):       
             self.helpTimerFired(dt)
+        elif (self.mode == "levelSelection"):
+            self.levelSelectionTimerFired(dt)
 
 
     def redrawAll(self, screen):
@@ -64,6 +70,8 @@ class Game(PygameGame):
             self.playGameRedrawAll(screen)
         elif (self.mode == "help"):       
             self.helpRedrawAll(screen)
+        elif (self.mode == "levelSelection"):
+            self.levelSelectionRedrawAll(screen)
 
     ########################
     # splashScreen mode
@@ -71,24 +79,26 @@ class Game(PygameGame):
     def splashScreenKeyPressed(self, keyCode, modifier):
         self.mode = "playGame"
     def splashScreenMousePressed(self, x, y):
-        pass
+        pos = (x, y)
+        if(self.levelRect.collidepoint(pos)):
+            self.mode = "levelSelection"
     def splashScreenTimerFired(self, dt):
         pass
     def splashScreenRedrawAll(self, screen):
         # Draw the title and the level selection
-        font1 = pygame.font.Font("freesansbold.ttf", 120)
+        font1 = pygame.font.SysFont("copperplatettc", 120)
 
         self.titleSurface = font1.render("Pendo", True, (255, 255, 255))
-        titleRect = self.titleSurface.get_rect()
-        titleRect.center = (self.width//2, self.height//2-70)
-        screen.blit(self.titleSurface, titleRect)
+        self.titleRect = self.titleSurface.get_rect()
+        self.titleRect.center = (self.width//2, self.height//2-70)
+        screen.blit(self.titleSurface, self.titleRect)
 
-        font2 = pygame.font.Font("freesansbold.ttf", 50)
+        font2 = pygame.font.SysFont("americantypewriterttc", 50)
 
-        self.levelSurface = font2.render("Level Selection", True, (255, 255, 255), (0,0,0))
-        levelRect = self.levelSurface.get_rect()
-        levelRect.center = (self.width//2, self.height//2+40)
-        screen.blit(self.levelSurface, levelRect)
+        self.levelSurface = font2.render("Level Selection", True, (255, 255, 255), (205,140,149))
+        self.levelRect = self.levelSurface.get_rect()
+        self.levelRect.center = (self.width//2, self.height//2+50)
+        screen.blit(self.levelSurface, self.levelRect)
 
     ########################
     # playGame mode
@@ -102,7 +112,8 @@ class Game(PygameGame):
         elif(self.resetRect.collidepoint(pos)):
             self.resetState = True
         elif(self.menuRect.collidepoint(pos)):
-            self.mode = "splashScreen"
+            self.mode = "levelSelection"
+
     def playGameTimerFired(self, dt):
         if self.player.beginMoving:
             self.playerGroup.update(self.board)
@@ -126,7 +137,50 @@ class Game(PygameGame):
     def helpTimerFired(self, dt):
         pass
     def helpRedrawAll(self, screen):
+        font3 = pygame.font.Font("freesansbold.ttf", 20)
+
+        textSurface0 = font3.render("Instruction:))))", True, (255, 255, 255))
+        screen.blit(textSurface0, ((self.width/2-300, self.height/2-220)))
+
+        textSurface1 = font3.render("~Use your mouse to drag a tile to any empty spot~", True, (255, 255, 255))
+        screen.blit(textSurface1, (self.width/2-300, self.height/2-170))
+
+        textSurface2 = font3.render("~Build up the path to the target blue spot~", True, (255, 255, 255))
+        screen.blit(textSurface2, (self.width/2-300, self.height/2-120))
+
+        textSurface3 = font3.render("~Click on the right arrow for the ball to roll~", True, (255, 255, 255))
+        screen.blit(textSurface3, (self.width/2-300, self.height/2-70))
+
+        textSurface4 = font3.render("~Click on the menu button to go back to Level Selection Page~", True, (255, 255, 255))
+        screen.blit(textSurface4, (self.width/2-300, self.height/2-20)) 
+
+        textSurface5 = font3.render("~Click on the restart button to restart the game~", True, (255, 255, 255))
+        screen.blit(textSurface5, (self.width/2-300, self.height/2+30))      
+
+        textSurface6 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
+        screen.blit(textSurface6, (self.width/2-60, self.height/2+80))                
+
+
+    ########################
+    # levelSelection mode
+    ########################
+    def levelSelectionKeyPressed(self, keyCode, modifier):
         pass
+    def levelSelectionMousePressed(self, x, y):
+        self.mode = "help"
+    def levelSelectionTimerFired(self, dt):
+        pass
+    def levelSelectionRedrawAll(self, screen):
+        font2 = pygame.font.SysFont("americantypewriterttc", 50)
+
+        self.levelSelectionSurface = font2.render("Level Selection", True, (255, 255, 255),(205,140,149))
+        self.levelSelectionRect = self.levelSelectionSurface.get_rect()
+        self.levelSelectionRect.center = (self.width//2, 40)
+        screen.blit(self.levelSelectionSurface, self.levelSelectionRect)
+
+
+
+    
 
 game = Game()
 game.run()
