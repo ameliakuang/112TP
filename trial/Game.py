@@ -75,7 +75,20 @@ class Game(PygameGame):
     def splashScreenTimerFired(self, dt):
         pass
     def splashScreenRedrawAll(self, screen):
-        pass
+        # Draw the title and the level selection
+        font1 = pygame.font.Font("freesansbold.ttf", 120)
+
+        self.titleSurface = font1.render("Pendo", True, (255, 255, 255))
+        titleRect = self.titleSurface.get_rect()
+        titleRect.center = (self.width//2, self.height//2-70)
+        screen.blit(self.titleSurface, titleRect)
+
+        font2 = pygame.font.Font("freesansbold.ttf", 50)
+
+        self.levelSurface = font2.render("Level Selection", True, (255, 255, 255), (0,0,0))
+        levelRect = self.levelSurface.get_rect()
+        levelRect.center = (self.width//2, self.height//2+40)
+        screen.blit(self.levelSurface, levelRect)
 
     ########################
     # playGame mode
