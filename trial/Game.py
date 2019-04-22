@@ -33,6 +33,7 @@ class Game(PygameGame):
         self.menu = Menu(self.width, self.height)
 
         self.controlBar = controlBar(self.width, self.height)
+        self.objectDragged = None
 
     def keyPressed(self, keyCode, modifier):
         if (self.mode == "splashScreen"): 
@@ -57,6 +58,10 @@ class Game(PygameGame):
             self.levelSelectionMousePressed(x,y)
         elif (self.mode == "levelCreation"):
             self.levelCreationMousePressed(keyCode, modifier)
+
+    def mouseDrag(self, x, y):
+        if self.mode == "playGame":
+            self.playGameMouseDrag(x, y)
 
     def timerFired(self, dt):
         if (self.mode == "splashScreen"): 
@@ -88,7 +93,7 @@ class Game(PygameGame):
     ########################
     def playGameKeyPressed(self, keyCode, modifier):
         pass
-        
+
     def playGameMousePressed(self, x, y):
         pos = (x, y)
         if(self.beginRect.collidepoint(pos)):
@@ -97,6 +102,12 @@ class Game(PygameGame):
             self.resetState = True
         elif(self.menuRect.collidepoint(pos)):
             self.mode = "levelSelection"
+
+    def playGameMouseDrag(self, x, y):
+        pos = (x,y)
+
+        if self.controlBar.tileList[0].collidepoint(pos):
+
 
     def playGameTimerFired(self, dt):
         if self.player.beginMoving:
