@@ -1,35 +1,11 @@
-import cv2
-import numpy as np
-
-def getPoints():
-    pass
-
-def getTransformation(inv = False):
-    dst_w = 70
-    dst_h = 44
-    src = np.zeros((3,2), dtype = np.float32)
-    dst = np.zeros((3,2), dtype = np.float32)
-    src[0, :] = (300, 100)
-    src[1, :] = (195, 166)
-    src[2, :] = (300, 232)
-    dst[0, :] = (0, 0)
-    dst[1, :] = (195, 166)
-    dst[2, :] = (300, 232)
-
-    if inv:
-        trans = cv2.getAffineTransform(np.float32(dst), np.float32(src))
-    else:
-        trans = cv2.getAffineTransform(np.float32(dst), np.float32(src))
-    return trans
-
-#print(getTransformation())
-
-
-
-def mapToIso(row, col, halfWidth, halfHeight):
-    iso_x = (row*halfWidth - col * halfHeight)
-    iso_y = (row*halfWidth + col*halfHeight)/2
-    return (iso_x, iso_y)
+# Citation: http://clintbellanger.net/articles/isometric_math/
+def mapToIso(row, col, cols, halfWidth, halfHeight, screen):
+    iso_x = (row-col) * halfWidth
+    iso_y = (row+col) * halfHeight
+    # adjust the coordinates to be on the center
+    newIso_x = iso_x + screen.get_rect().centerx - halfWidth
+    newIso_y = iso_y + screen.get_rect().centery - cols*halfHeight
+    return (newIso_x, newIso_y)
     
 # not sure if works at all
 def isoToMap(iso_x, iso_y, halfWidth, halfHeight):

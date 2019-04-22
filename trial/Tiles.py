@@ -16,7 +16,6 @@ class Tile(pygame.sprite.Sprite):
         self.image = pygame.image.load('images/tiles/normal.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.type = 0
-        
 
 class DireTile(Tile):
     def __init__(self, dire):

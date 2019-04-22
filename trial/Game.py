@@ -9,7 +9,7 @@ import utility
 
 class Game(PygameGame):
     def init(self):
-        self.mode = "splashScreen"
+        self.mode = "playGame"
         # Background color
         self.bgColor = (247, 202, 201)
 
@@ -83,6 +83,37 @@ class Game(PygameGame):
             self.levelCreationRedrawAll(keyCode, modifier)
 
     ########################
+    # playGame mode
+    ########################
+    def playGameKeyPressed(self, keyCode, modifier):
+        pass
+    def playGameMousePressed(self, x, y):
+        pos = (x, y)
+        if(self.beginRect.collidepoint(pos)):
+            self.player.beginMoving = True
+        elif(self.resetRect.collidepoint(pos)):
+            self.resetState = True
+        elif(self.menuRect.collidepoint(pos)):
+            self.mode = "levelSelection"
+
+    def playGameTimerFired(self, dt):
+        if self.player.beginMoving:
+            if(not self.player.illegalMove):
+                self.playerGroup.update(self.board)
+            else:
+                self.player.row, self.player.col = (0,0)
+                print("You lose!")
+
+    def playGameRedrawAll(self, screen):
+        # Draw the board
+        self.boardObject.draw(screen)
+        # Draw the control
+        self.controlBar.draw(screen, self.width, self.height)
+        self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
+        self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
+        self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
+
+    ########################
     # splashScreen mode
     ########################
     def splashScreenKeyPressed(self, keyCode, modifier):
@@ -116,35 +147,6 @@ class Game(PygameGame):
         self.levelCreationRect = self.levelCreationSurface.get_rect()
         self.levelCreationRect.center = (self.width//2, self.height//2+150)
         screen.blit(self.levelCreationSurface, self.levelCreationRect)
-
-
-
-    ########################
-    # playGame mode
-    ########################
-    def playGameKeyPressed(self, keyCode, modifier):
-        pass
-    def playGameMousePressed(self, x, y):
-        pos = (x, y)
-        if(self.beginRect.collidepoint(pos)):
-            self.player.beginMoving = True
-        elif(self.resetRect.collidepoint(pos)):
-            self.resetState = True
-        elif(self.menuRect.collidepoint(pos)):
-            self.mode = "levelSelection"
-
-    def playGameTimerFired(self, dt):
-        if self.player.beginMoving:
-            self.playerGroup.update(self.board)
-    def playGameRedrawAll(self, screen):
-        # Draw the board
-        self.boardObject.draw(screen)
-        # Draw the control
-        self.controlBar.draw(screen, self.width, self.height)
-        self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
-        self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
-        self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
-
 
     ########################
     # help mode
@@ -180,7 +182,8 @@ class Game(PygameGame):
         screen.blit(textSurface6, (self.width/2-300, self.height/2+80))      
 
         textSurface7 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
-        screen.blit(textSurface7, (self.width/2-60, self.height/2+130))                
+        screen.blit(textSurface7, (self.width/2-60, self.height/2+130))  
+             
 
 
     ########################

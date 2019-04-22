@@ -7,12 +7,12 @@ import utility
 class Board(object):
     def __init__(self, n, player):
         self.rows = self.cols = n
-        self.board = Board.generateBoard(3)
+        self.board = Board.generateBoard(n)
         #self.controlBar = Board.generateControlBar(self.board)
         self.player = player
 
         self.tileWidth = 70
-        self.tileHeight = 70
+        self.tileHeight = 44
         self.halfTileWidth = self.tileWidth//2
         self.halfTileHeight = self.tileHeight//2
         
@@ -40,24 +40,10 @@ class Board(object):
         #if solution != None:
             #pass
         return [[-1, 8, 0,0,0],
-                [0, 0, 5,0,0],
+                [0, 0, 0,0,0],
                 [0, 0, 0,0,0],
                 [0, 8, 0,0,0],
-                [3, 0, 5,0,0]]
-
-
-
-    @staticmethod
-    def generateControlBar(board):
-        for row in range(len(board)):
-            for col in range(len(board[0])):
-                num = board[row][col]
-                if num != -1 or num != 0:
-                    pass
-
-
-
-
+                [5, 0, 5,0,0]]
 
     def draw(self, screen):
         for row in range(len(self.board)):
@@ -67,44 +53,32 @@ class Board(object):
                 if(num == -1) or (num == 0):
                     tile = Tile()
                     tileImage = tile.image
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    screen.blit(tileImage, (centered_x, centered_y))
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
                 elif(num in range(1,5)):
                     tile = DireTile(num)
                     tileImage = tile.image
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    screen.blit(tileImage, (centered_x, centered_y))
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
                 elif(num == 5):
                     tile = PortalTile()
                     tileImage = tile.image
                     tileRect = tile.rect
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
-                    screen.blit(tileImage, (centered_x, centered_y))
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
                 elif(num == 8):
                     tile = TargetTile()
                     tileImage = tile.image
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    screen.blit(tileImage, (centered_x, centered_y))
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
                 else:
                     continue
-
-        iso_x, iso_y = utility.mapToIso(self.player.row, self.player.col, self.halfTileWidth, self.halfTileHeight)
-        centered_x = screen.get_rect().centerx + iso_x
-        centered_y = screen.get_rect().centery//2 + iso_y
+        # for the player
+        iso_x, iso_y = utility.mapToIso(self.player.row, self.player.col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
         playerGroup = pygame.sprite.GroupSingle(self.player)
         # centered_y-10 to makes the player looks like higher than the board
-        self.player.rect.x, self.player.rect.y = centered_x, centered_y-10
+        self.player.rect.x, self.player.rect.y = iso_x, iso_y-10
         self.player.image.set_colorkey((255,255,255))
-        #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, 70, 44))
         screen.blit(self.player.image, (self.player.rect.x,self.player.rect.y))
         
         
