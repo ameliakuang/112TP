@@ -125,6 +125,7 @@ class Game(PygameGame):
             # draw the tile on the board
             row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
             if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
+                # check legality of putting a tile there
                 if(not self.board[row][col] in range(-1, 9)):
                     self.board[row][col] = self.objectDragged[0].type
 

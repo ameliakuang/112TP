@@ -69,6 +69,7 @@ class Player(pygame.sprite.Sprite):
                 self.drow, self.dcol = 0,0
             self.row += self.drow
             self.col += self.dcol
+            self.board = board
 
 
     def teleport(self, row, col, board):

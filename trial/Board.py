@@ -39,18 +39,24 @@ class Board(object):
         #solution = solve(board)
         #if solution != None:
             #pass
-        return [[-1, 0, 0,0,0],
+        return [[-1, 0, 0,0,2],
                 [0, 0, 0,0,0],
                 [0, 0, 0,0,0],
-                [5, 8, 0,0,0],
-                [9, 0, 0,0,0]]
+                [0, 8, 0,0,0],
+                [4, 0, 0,0,1]]
 
     def draw(self, screen):
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 num = self.board[row][col]
-                # the player position and normal grids
-                if(num == -1) or (num == 0):
+                # the player position
+                if(num == -1):
+                    tile = DireTile(3)
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # normal tile
+                if (num == 0):
                     tile = Tile()
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
