@@ -6,6 +6,7 @@ from Tiles import *
 from Control import *
 from Scene import *
 import utility
+import copy
 
 class Game(PygameGame):
     def init(self):
@@ -20,7 +21,7 @@ class Game(PygameGame):
         ## self.boardObject is an object of the class Board
         ## self.board is the 2d list representation of the board object
         self.boardObject = Board(5, self.player)
-        self.board = self.boardObject.board
+        self.board = copy.deepcopy(self.boardObject.board)
 
         # Control
         self.begin = Begin(self.width, self.height)
@@ -87,6 +88,7 @@ class Game(PygameGame):
     ########################
     def playGameKeyPressed(self, keyCode, modifier):
         pass
+        
     def playGameMousePressed(self, x, y):
         pos = (x, y)
         if(self.beginRect.collidepoint(pos)):
@@ -105,6 +107,10 @@ class Game(PygameGame):
             else:
                 self.player.row, self.player.col = (0,0)
                 print("You lose!")
+        if self.resetState:
+            self.board = copy.deepcopy(self.boardObject.board)
+            self.player.__init__()
+            self.resetState = False
 
     def playGameRedrawAll(self, screen):
         # Draw the board

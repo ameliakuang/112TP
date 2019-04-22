@@ -41,9 +41,9 @@ class Board(object):
             #pass
         return [[-1, 0, 0,0,0],
                 [0, 0, 0,0,0],
-                [8, 0, 0,0,0],
+                [0, 0, 0,0,0],
                 [0, 8, 5,0,0],
-                [5, 0, 0,0,0]]
+                [9, 0, 0,0,0]]
 
     def draw(self, screen):
         for row in range(len(self.board)):

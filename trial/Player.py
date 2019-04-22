@@ -68,15 +68,6 @@ class Player(pygame.sprite.Sprite):
             self.col += self.dcol
 
 
-    def checkIfWin(self, row, col, board):
-        rows = cols = len(board)
-        for r in range(rows):
-            for c in range(cols):
-                if(board[r][c] == 8) and (row == r) and (col == c):
-                    return [True, (r, c)]
-        return False
-
-
     def teleport(self, row, col, board):
         rows = cols = len(board)
         for r in range(rows):
