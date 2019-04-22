@@ -34,7 +34,7 @@ class PygameGame(object):
     def keyPressed(self, keyCode, modifier):
         pass
 
-    def keyReleased(self, keyCode, modifier):
+    def keyReleased(self, keyCode, modifier, screen):
         pass
 
     def timerFired(self, dt):

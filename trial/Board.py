@@ -42,7 +42,7 @@ class Board(object):
         return [[-1, 0, 0,0,0],
                 [0, 0, 0,0,0],
                 [0, 0, 0,0,0],
-                [0, 8, 5,0,0],
+                [5, 8, 0,0,0],
                 [9, 0, 0,0,0]]
 
     def draw(self, screen):
@@ -55,22 +55,31 @@ class Board(object):
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # direction tiles
                 elif(num in range(1,5)):
                     tile = DireTile(num)
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # portal tiles
                 elif(num == 5):
                     tile = PortalTile()
                     tileImage = tile.image
                     tileRect = tile.rect
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # target tiles
                 elif(num == 8):
                     tile = TargetTile()
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # jump tiles
+
+                # cube
+
+
+                # empty spots
                 else:
                     continue
         # for the player

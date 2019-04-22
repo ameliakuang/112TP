@@ -1,3 +1,9 @@
+def roundHalfUp(d):
+    # Round to nearest with ties going away from zero.
+    import decimal
+    rounding = decimal.ROUND_HALF_UP
+    return int(decimal.Decimal(d).to_integral_value(rounding=rounding))
+
 # Citation: http://clintbellanger.net/articles/isometric_math/
 def mapToIso(row, col, cols, halfWidth, halfHeight, screen):
     iso_x = (row-col) * halfWidth
@@ -7,8 +13,10 @@ def mapToIso(row, col, cols, halfWidth, halfHeight, screen):
     newIso_y = iso_y + screen.get_rect().centery - cols*halfHeight
     return (newIso_x, newIso_y)
     
-# not sure if works at all
-def isoToMap(iso_x, iso_y, halfWidth, halfHeight):
-    row = x / halfWidth + y / halfHeight
-    col = y / halfHeight*2 - x / halfWidth*2
-    return (row, col)
+
+def isoToMap(iso_x, iso_y, cols, halfWidth, halfHeight, screen):
+    iso_x = iso_x - screen.get_rect().centerx + halfWidth - halfWidth
+    iso_y = iso_y - screen.get_rect().centery + halfHeight*cols - halfHeight
+    row = 2*(iso_x/halfWidth+iso_y/halfHeight)
+    col = 2*(iso_y/halfHeight - iso_x/halfWidth)
+    return (round(row), round(col))

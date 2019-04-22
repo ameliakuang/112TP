@@ -26,11 +26,14 @@ class Player(pygame.sprite.Sprite):
     7: cube 
     8：target tiles
     '''
-
+    # either the player has moved out of the board
+    # or the player reaches somewhere empty
     def moveIllegal(self, board):
         rows = len(board)
         cols = len(board[0])
         if(self.row < 0) or (self.col < 0) or (self.row >= rows) or (self.col >= cols):
+            return True
+        if not ( board[self.row][self.col] in range(-1, 9)):
             return True
         return False
 

@@ -33,6 +33,8 @@ class Game(PygameGame):
         self.menu = Menu(self.width, self.height)
 
         self.controlBar = controlBar(self.width, self.height)
+
+        self.dragFlag = False
         self.objectDragged = None
 
     def keyPressed(self, keyCode, modifier):
@@ -62,6 +64,10 @@ class Game(PygameGame):
     def mouseDrag(self, x, y):
         if self.mode == "playGame":
             self.playGameMouseDrag(x, y)
+
+    def mouseRelease(self, x, y):
+        if self.mode == "playGame":
+            self.playGameMouseRelease(x, y)
 
     def timerFired(self, dt):
         if (self.mode == "splashScreen"): 
@@ -106,7 +112,22 @@ class Game(PygameGame):
     def playGameMouseDrag(self, x, y):
         pos = (x,y)
 
-        if self.controlBar.tileList[0].collidepoint(pos):
+        if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag:
+            print("here")
+            tile = Tile()
+            self.dragFlag = True
+            tile.rect.center = (pos[0]-70/2, pos[1]-44/2)
+            self.objectDragged = (tile, tile.rect.center)
+
+    def playGameMouseRelease(self, x, y, screen):
+        if self.dragFlag:
+            self.dragFlag = False
+            # draw the tile on the board
+            row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
+            if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
+                if(not self.board[row][col] in range(-1, 9)):
+                    self.board[row][col] = self.objectDragged[0].type
+
 
 
     def playGameTimerFired(self, dt):
@@ -126,11 +147,16 @@ class Game(PygameGame):
     def playGameRedrawAll(self, screen):
         # Draw the board
         self.boardObject.draw(screen)
+
+
         # Draw the control
         self.controlBar.draw(screen, self.width, self.height)
         self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
+
+        if self.dragFlag and self.objectDragged != None:
+            screen.blit(self.objectDragged[0].image, self.objectDragged[1])
 
     ########################
     # splashScreen mode
