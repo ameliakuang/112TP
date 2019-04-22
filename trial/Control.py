@@ -29,7 +29,7 @@ class Menu(Control):
         self.image = pygame.image.load('images/icons/menuList.png').convert_alpha()
         self.rect = self.image.get_rect()
         #print(self.rect.x, self.rect.y)
-        self.rect.x, self.rect.y = -3, -10
+        self.rect.x, self.rect.y = -7, -10
 
 
 class controlBar(Control):
