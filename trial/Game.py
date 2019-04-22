@@ -100,6 +100,8 @@ class Game(PygameGame):
         if self.player.beginMoving:
             if(not self.player.illegalMove):
                 self.playerGroup.update(self.board)
+                if(self.player.win):
+                    print("You win!")
             else:
                 self.player.row, self.player.col = (0,0)
                 print("You lose!")
@@ -183,7 +185,7 @@ class Game(PygameGame):
 
         textSurface7 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
         screen.blit(textSurface7, (self.width/2-60, self.height/2+130))  
-             
+
 
 
     ########################
