@@ -34,6 +34,7 @@ class Game(PygameGame):
 
         self.controlBar = controlBar(self.width, self.height)
 
+        # Drag
         self.dragFlag = False
         self.objectDragged = None
 
