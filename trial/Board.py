@@ -33,7 +33,7 @@ class Board(object):
     9: empty spot
     '''
     def generateBoard(self, n, level):
-        if level == 0:
+        if level != 1:
             return [[-1, 0, 0,0,2],
                     [0, 0, 0,0,0],
                     [0, 0, 0,0,0],

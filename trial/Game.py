@@ -22,7 +22,7 @@ class Game(PygameGame):
         self.level = 0
         self.boardObject = Board(5, self.player, self.level)
         self.board = copy.deepcopy(self.boardObject.board)
-        print(self.board)
+        #print(self.board)
         
 
         # Control
@@ -252,12 +252,15 @@ class Game(PygameGame):
         pos = (x, y)
         if(self.textRect1.collidepoint(pos)):
             self.level = 1
+            self.init()
             self.mode = "playGame"
         elif(self.textRect2.collidepoint(pos)):
             self.level = 2
+            self.init()
             self.mode = "playGame"
         elif(self.textRect3.collidepoint(pos)):
             self.level3 = 3
+            self.init()
             self.mode = "playGame"
     def levelSelectionTimerFired(self, dt):
         pass
