@@ -2,13 +2,13 @@ import pygame
 from Player import Player
 from Tiles import *
 import utility
+import random
 
 
 class Board(object):
-    def __init__(self, n, player):
+    def __init__(self, n, player, level):
         self.rows = self.cols = n
-        self.board = Board.generateBoard(n)
-        #self.controlBar = Board.generateControlBar(self.board)
+        self.board = self.generateBoard(5, 1)
         self.player = player
 
         self.tileWidth = 70
@@ -16,8 +16,7 @@ class Board(object):
         self.halfTileWidth = self.tileWidth//2
         self.halfTileHeight = self.tileHeight//2
         
-        # Group for the generated tiles
-        self.options = pygame.sprite.Group()
+
 
 
 
@@ -31,19 +30,34 @@ class Board(object):
     6: jump tiles
     7: cube 
     8：target tiles
+    9: empty spot
     '''
-    @staticmethod
-    def generateBoard(n):
-        board = [ [ None ] * n for row in range(n)]
-        board[0][0] = -1
-        #solution = solve(board)
-        #if solution != None:
-            #pass
-        return [[-1, 0, 0,0,2],
-                [0, 0, 0,0,0],
-                [0, 0, 0,0,0],
-                [6, 7, 0,0,0],
-                [9, 0, 0,0,1]]
+    def generateBoard(self, n, level):
+        if level == 0:
+            return [[-1, 0, 0,0,2],
+                    [0, 0, 0,0,0],
+                    [0, 0, 0,0,0],
+                    [6, 7, 0,0,0],
+                    [9, 0, 0,0,1]]
+        elif level == 1:
+            board = [[0] * n for row in range(n)]
+            board[0][0] = -1
+            board[n-1][n-1] = 8
+            # generate two possibilities
+            temp = random.randint(1, 3)
+            # two spots for portal tiles
+            if(temp == 1):
+                row_on_0th_col = random.randint(1, n-2)
+                row_on_last_col = random.randint(1, n-2)
+                board[row_on_0th_col][0] = 9
+                board[row_on_last_col][n-1] = 9
+            elif(temp == 2):   
+                board[n-1][0] = 9
+            else:
+                row_on_0th_col = random.randint(1, n-2)
+                board[row_on_0th_col][0] = 9
+                board[row_on_0th_col][n-1] = 9
+            return board
 
     def draw(self, screen):
         for row in range(len(self.board)):
@@ -101,13 +115,10 @@ class Board(object):
         iso_x, iso_y = utility.mapToIso(self.player.row, self.player.col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
         playerGroup = pygame.sprite.GroupSingle(self.player)
         # centered_y-10 to makes the player looks like higher than the board
-        self.player.rect.x, self.player.rect.y = iso_x, iso_y-10
+        self.player.rect.x, self.player.rect.y = iso_x, iso_y-15
         self.player.image.set_colorkey((255,255,255))
         screen.blit(self.player.image, (self.player.rect.x,self.player.rect.y))
         
         
-
-
-
 
 

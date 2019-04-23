@@ -4,7 +4,6 @@ from Board import *
 from Player import *
 from Tiles import *
 from Control import *
-from Scene import *
 import utility
 import copy
 
@@ -20,8 +19,11 @@ class Game(PygameGame):
         # Board
         ## self.boardObject is an object of the class Board
         ## self.board is the 2d list representation of the board object
-        self.boardObject = Board(5, self.player)
+        self.level = 0
+        self.boardObject = Board(5, self.player, self.level)
         self.board = copy.deepcopy(self.boardObject.board)
+        print(self.board)
+        
 
         # Control
         self.begin = Begin(self.width, self.height)
@@ -249,11 +251,14 @@ class Game(PygameGame):
     def levelSelectionMousePressed(self, x, y):
         pos = (x, y)
         if(self.textRect1.collidepoint(pos)):
-            self.mode = "level1"
+            self.level = 1
+            self.mode = "playGame"
         elif(self.textRect2.collidepoint(pos)):
-            self.mode = "level2"
+            self.level = 2
+            self.mode = "playGame"
         elif(self.textRect3.collidepoint(pos)):
-            self.mode = "level3"
+            self.level3 = 3
+            self.mode = "playGame"
     def levelSelectionTimerFired(self, dt):
         pass
     def levelSelectionRedrawAll(self, screen):
