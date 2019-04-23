@@ -6,6 +6,7 @@ from Tiles import *
 from Control import *
 import utility
 import copy
+import random
 
 class Game(PygameGame):
     def init(self, level = 0):
@@ -20,10 +21,15 @@ class Game(PygameGame):
         ## self.boardObject is an object of the class Board
         ## self.board is the 2d list representation of the board object
         self.level = level
-        self.boardObject = Board(5, self.player, self.level)
+        n = 0
+        if self.level == 3:
+            n = random.choice([6,8,10])
+        else:
+            n = 5
+        self.boardObject = Board(n, self.player, self.level)
         print("board level", self.level)
         self.board = copy.deepcopy(self.boardObject.board)
-        #print(self.board)
+        print(self.board)
         
         self.scene = None
 
@@ -119,9 +125,9 @@ class Game(PygameGame):
         pos = (x,y)
 
         if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag:
-            # print(pos)
-            # print(self.controlBar.tileRectList[0])
-            # print("here")
+            print(pos)
+            print(self.controlBar.tileRectList[0])
+            print("here")
             tile = Tile()
             self.dragFlag = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
@@ -166,7 +172,6 @@ class Game(PygameGame):
             self.objectDragged = (tile, pos)
 
 
-
     def playGameMouseReleased(self, x, y, screen):
         if self.dragFlag:
             self.dragFlag = False
@@ -174,8 +179,10 @@ class Game(PygameGame):
             row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
             if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
                 # check legality of putting a tile there
-                if(not self.board[row][col] in range(-1, 9)):
+                if(self.board[row][col] == 9):
                     self.board[row][col] = self.objectDragged[0].type
+                else:
+                    self.objectDragged = None
 
     def playGameTimerFired(self, dt):
         if self.player.beginMoving:
@@ -262,7 +269,7 @@ class Game(PygameGame):
     def helpKeyPressed(self, keyCode, modifier):
         pass
     def helpMousePressed(self, x, y):
-        self.mode = "playGame"
+        self.mode = "splashScreen"
     def helpTimerFired(self, dt):
         pass
     def helpRedrawAll(self, screen):
@@ -286,7 +293,7 @@ class Game(PygameGame):
         textSurface5 = font3.render("~Click on the restart button to restart the game~", True, (255, 255, 255))
         screen.blit(textSurface5, (self.width/2-300, self.height/2+30))  
 
-        textSurface6 = font3.render("~Click anywhere to start~", True, (255, 255, 255))
+        textSurface6 = font3.render("~Click anywhere to go back and select a level~", True, (255, 255, 255))
         screen.blit(textSurface6, (self.width/2-300, self.height/2+80))      
 
         textSurface7 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
