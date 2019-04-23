@@ -95,7 +95,7 @@ class PygameGame(object):
                 ## Release Key
                 elif event.type == pygame.KEYUP:
                     self._keys[event.key] = False
-                    self.keyReleased(event.key, event.mod)
+                    self.keyReleased(event.key, event.mod, screen)
                 # Quit
                 elif event.type == pygame.QUIT:
                     playing = False

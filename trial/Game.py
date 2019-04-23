@@ -10,7 +10,7 @@ import copy
 
 class Game(PygameGame):
     def init(self):
-        self.mode = "playGame"
+        self.mode = "splashScreen"
         # Background color
         self.bgColor = (247, 202, 201)
 
@@ -34,7 +34,7 @@ class Game(PygameGame):
 
         self.controlBar = controlBar(self.width, self.height)
 
-        # Drag
+
         self.dragFlag = False
         self.objectDragged = None
 
@@ -171,6 +171,9 @@ class Game(PygameGame):
             self.mode = "levelSelection"
         elif(self.levelCreationRect.collidepoint(pos)):
             self.mode = "levelCreation"
+        elif(self.helpRect.collidepoint(pos)):
+            self.mode = "help"
+
 
     def splashScreenTimerFired(self, dt):
         pass
@@ -194,6 +197,11 @@ class Game(PygameGame):
         self.levelCreationRect = self.levelCreationSurface.get_rect()
         self.levelCreationRect.center = (self.width//2, self.height//2+150)
         screen.blit(self.levelCreationSurface, self.levelCreationRect)
+
+        self.helpSurface = font2.render("Help", True, (255, 255, 255), (205,140,149))
+        self.helpRect = self.helpSurface.get_rect()
+        self.helpRect.center = (self.width//2, self.height//2+250)
+        screen.blit(self.helpSurface, self.helpRect)        
 
     ########################
     # help mode
@@ -239,16 +247,39 @@ class Game(PygameGame):
     def levelSelectionKeyPressed(self, keyCode, modifier):
         pass
     def levelSelectionMousePressed(self, x, y):
-        self.mode = "help"
+        pos = (x, y)
+        if(self.textRect1.collidepoint(pos)):
+            self.mode = "level1"
+        elif(self.textRect2.collidepoint(pos)):
+            self.mode = "level2"
+        elif(self.textRect3.collidepoint(pos)):
+            self.mode = "level3"
     def levelSelectionTimerFired(self, dt):
         pass
     def levelSelectionRedrawAll(self, screen):
         font2 = pygame.font.Font("freesansbold.ttf", 50)
 
-        self.levelSelectionSurface = font2.render("Level Selection", True, (255, 255, 255),(205,140,149))
-        self.levelSelectionRect = self.levelSelectionSurface.get_rect()
+        levelSelectionSurface = font2.render("Level Selection", True, (255, 255, 255), (205,140,149))
+        self.levelSelectionRect = levelSelectionSurface.get_rect()
         self.levelSelectionRect.center = (self.width//2, 40)
-        screen.blit(self.levelSelectionSurface, self.levelSelectionRect)
+        screen.blit(levelSelectionSurface, self.levelSelectionRect)
+
+        level1Text = font2.render("Level 1", True, (255, 255, 255), (205,140,149))
+        self.textRect1 = level1Text.get_rect()
+        self.textRect1.center = (self.width//2, 150)
+        screen.blit(level1Text, self.textRect1)
+
+        level2Text = font2.render("Level 2", True, (255, 255, 255), (205,140,149))
+        self.textRect2 = level2Text.get_rect()
+        self.textRect2.center = (self.width//2, screen.get_rect().centery)
+        screen.blit(level2Text, self.textRect2)
+
+        level3Text = font2.render("Level 3", True, (255, 255, 255), (205,140,149))
+        self.textRect3 = level3Text.get_rect()
+        self.textRect3.center = (self.width//2, self.height - 150)
+        screen.blit(level3Text, self.textRect3)
+
+
 
     ########################
     # levelCreation mode

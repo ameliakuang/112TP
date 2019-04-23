@@ -43,7 +43,7 @@ class Board(object):
                 [0, 0, 0,0,0],
                 [0, 0, 0,0,0],
                 [6, 7, 0,0,0],
-                [4, 0, 0,0,1]]
+                [9, 0, 0,0,1]]
 
     def draw(self, screen):
         for row in range(len(self.board)):
@@ -94,11 +94,6 @@ class Board(object):
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
-                # jump tiles
-
-                # cube
-
-
                 # empty spots
                 else:
                     continue
