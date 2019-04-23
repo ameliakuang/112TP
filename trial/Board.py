@@ -8,7 +8,7 @@ import random
 class Board(object):
     def __init__(self, n, player, level):
         self.rows = self.cols = n
-        self.board = self.generateBoard(5, 1)
+        self.board = self.generateBoard(5, level)
         self.player = player
 
         self.tileWidth = 70
@@ -34,9 +34,9 @@ class Board(object):
     '''
     def generateBoard(self, n, level):
         if level != 1:
-            return [[-1, 0, 0,0,2],
+            return [[-1, 0, 0,0,0],
                     [0, 0, 0,0,0],
-                    [0, 0, 0,0,0],
+                    [8, 0, 0,0,0],
                     [6, 7, 0,0,0],
                     [9, 0, 0,0,1]]
         elif level == 1:

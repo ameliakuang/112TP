@@ -21,9 +21,11 @@ class Game(PygameGame):
         ## self.board is the 2d list representation of the board object
         self.level = 0
         self.boardObject = Board(5, self.player, self.level)
+        print("board level", self.level)
         self.board = copy.deepcopy(self.boardObject.board)
         #print(self.board)
         
+        self.scene = None
 
         # Control
         self.begin = Begin(self.width, self.height)
@@ -139,10 +141,11 @@ class Game(PygameGame):
             if(not self.player.illegalMove):
                 self.playerGroup.update(self.board)
                 if(self.player.win):
-                    print("You win!")
+                    self.scene = CustomScene(True)
             else:
                 self.player.row, self.player.col = (0,0)
-                print("You lose!")
+                self.scene = CustomScene(False)
+
         if self.resetState:
             self.board = copy.deepcopy(self.boardObject.board)
             self.player.__init__()
@@ -162,6 +165,11 @@ class Game(PygameGame):
         if self.dragFlag and self.objectDragged != None:
             screen.blit(self.objectDragged[0].image, self.objectDragged[1])
 
+        #Scene
+        if(self.scene != None):
+            self.scene.draw(screen)
+
+
     ########################
     # splashScreen mode
     ########################
@@ -179,6 +187,7 @@ class Game(PygameGame):
 
     def splashScreenTimerFired(self, dt):
         pass
+
     def splashScreenRedrawAll(self, screen):
         # Draw the title and the level selection
         font1 = pygame.font.Font("freesansbold.ttf", 120)
@@ -251,16 +260,21 @@ class Game(PygameGame):
     def levelSelectionMousePressed(self, x, y):
         pos = (x, y)
         if(self.textRect1.collidepoint(pos)):
-            self.level = 1
+            print("1")
             self.init()
+            self.level = 1
             self.mode = "playGame"
         elif(self.textRect2.collidepoint(pos)):
-            self.level = 2
+            print("2")
+            
             self.init()
+            self.level = 2
             self.mode = "playGame"
         elif(self.textRect3.collidepoint(pos)):
-            self.level3 = 3
+            print("3")
+            
             self.init()
+            self.level3 = 3
             self.mode = "playGame"
     def levelSelectionTimerFired(self, dt):
         pass
@@ -301,7 +315,24 @@ class Game(PygameGame):
     def levelCreationRedrawAll(self, screen):
         pass
 
+class CustomScene(object):
+    def __init__(self, state):
+        self.state = state
 
+    def draw(self, screen):
+        # Win
+        if(self.state == True):
+            image = pygame.image.load('images/You Win.png').convert()
+            image.set_colorkey((0,0,0))
+            rect = image.get_rect()
+            rect.center = (screen.get_rect().centerx, screen.get_rect().centery)
+        # Lose
+        else:
+            image = pygame.image.load('images/game-over.png').convert()
+            rect = image.get_rect()
+            image.set_colorkey((0,0,0))
+            rect.center = (screen.get_rect().centerx, screen.get_rect().centery)
+        screen.blit(image, rect.center)
     
 
 game = Game()
