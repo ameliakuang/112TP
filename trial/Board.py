@@ -32,6 +32,7 @@ class Board(object):
     '''
     def generateBoard(self, n, level):
         board = [[0] * n for row in range(n)]
+        board[0][0] = -1
         if level == 0:
             return [[-1, 0, 0,0,0],
                     [0, 0, 0,0,0],
@@ -39,7 +40,6 @@ class Board(object):
                     [6, 7, 0,0,0],
                     [9, 0, 0,0,1]]
         elif level == 1:
-            board[0][0] = -1
             board[n-1][n-1] = 8
             #  two possibilities
             temp = random.randint(1, 3)
@@ -59,7 +59,21 @@ class Board(object):
                 board[row_on_0th_col][n-1] = 9
             return board
         elif level == 2:
-            pass
+            # ensure that a pair of direction tiles can be put
+            row_on_0th_col = random.randint(1, n-1)
+            row_on_last_col = row_on_0th_col
+            board[row_on_0th_col][0] = 9
+            board[row_on_last_col][n-1] = 9
+
+            row_on_last_col_for_target = random.randint(0, n-2)
+            board[row_on_last_col_for_target][n-1] = 8
+            
+            tempCol = random.randint(1, n-2)
+            for row in range(1,n-1):
+                board[row][tempCol] = 9
+            return board
+
+
 
 
     def draw(self, screen, board):
