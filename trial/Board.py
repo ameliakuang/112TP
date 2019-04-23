@@ -42,7 +42,7 @@ class Board(object):
         return [[-1, 0, 0,0,2],
                 [0, 0, 0,0,0],
                 [0, 0, 0,0,0],
-                [0, 8, 0,0,0],
+                [0, 7, 0,0,0],
                 [4, 0, 0,0,1]]
 
     def draw(self, screen):
@@ -73,6 +73,20 @@ class Board(object):
                     tileImage = tile.image
                     tileRect = tile.rect
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                elif(num == 6):
+                    tile = JumpTile()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))                    
+                # cube
+                elif(num == 7):
+                    tile = Cube()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    iso_y -= self.halfTileHeight+5
                     screen.blit(tileImage, (iso_x, iso_y))
                 # target tiles
                 elif(num == 8):

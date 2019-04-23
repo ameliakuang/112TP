@@ -17,6 +17,6 @@ def mapToIso(row, col, cols, halfWidth, halfHeight, screen):
 def isoToMap(iso_x, iso_y, cols, halfWidth, halfHeight, screen):
     iso_x = iso_x - screen.get_rect().centerx + halfWidth - halfWidth
     iso_y = iso_y - screen.get_rect().centery + halfHeight*cols - halfHeight
-    row = 2*(iso_x/halfWidth+iso_y/halfHeight)
-    col = 2*(iso_y/halfHeight - iso_x/halfWidth)
+    row = 1/2*(iso_x/halfWidth+iso_y/halfHeight)
+    col = 1/2*(iso_y/halfHeight - iso_x/halfWidth)
     return (round(row), round(col))
