@@ -54,6 +54,10 @@ class PygameGame(object):
         self.title = title
         self.bgColor = (255, 255, 255)
         pygame.init()
+        pygame.mixer.music.load("deep-nature.mp3")
+        pygame.mixer.music.set_volume(0.5)
+
+
 
     def run(self):
 
@@ -68,6 +72,7 @@ class PygameGame(object):
         # call game-specific initialization
         self.init()
         playing = True
+        pygame.mixer.music.play(loops=-1)
         while playing:
             time = clock.tick(self.fps)
             self.timerFired(time)

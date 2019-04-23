@@ -112,12 +112,8 @@ class Board(object):
                 else:
                     continue
         # for the player
-        iso_x, iso_y = utility.mapToIso(self.player.row, self.player.col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
-        playerGroup = pygame.sprite.GroupSingle(self.player)
-        # centered_y-10 to makes the player looks like higher than the board
-        self.player.rect.x, self.player.rect.y = iso_x, iso_y-15
-        self.player.image.set_colorkey((255,255,255))
-        screen.blit(self.player.image, (self.player.rect.x,self.player.rect.y))
+        self.player.draw(screen, self.cols, self.halfTileWidth, self.halfTileHeight)
+
         
         
 

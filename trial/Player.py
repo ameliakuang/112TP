@@ -1,4 +1,5 @@
 import pygame
+import utility
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -87,6 +88,14 @@ class Player(pygame.sprite.Sprite):
             return (1, 0)
         elif(self.currDire == "left"):
             return (0, 1)
+            
+    def draw(self, screen, cols, halfWidth, halfHeight):
+        iso_x, iso_y = utility.mapToIso(self.row, self.col, cols, halfWidth, halfHeight, screen)
+        playerGroup = pygame.sprite.GroupSingle(self)
+        # centered_y-10 to makes the player looks like higher than the board
+        self.rect.x, self.rect.y = iso_x, iso_y-15
+        self.image.set_colorkey((255,255,255))
+        screen.blit(self.image, (self.rect.x,self.rect.y))
 
 
 

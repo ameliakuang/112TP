@@ -4,11 +4,12 @@ from Board import *
 from Player import *
 from Tiles import *
 from Control import *
+import os
 import utility
 import copy
 
 class Game(PygameGame):
-    def init(self):
+    def init(self, level = 0):
         self.mode = "splashScreen"
         # Background color
         self.bgColor = (247, 202, 201)
@@ -19,7 +20,7 @@ class Game(PygameGame):
         # Board
         ## self.boardObject is an object of the class Board
         ## self.board is the 2d list representation of the board object
-        self.level = 0
+        self.level = level
         self.boardObject = Board(5, self.player, self.level)
         print("board level", self.level)
         self.board = copy.deepcopy(self.boardObject.board)
@@ -41,6 +42,7 @@ class Game(PygameGame):
 
         self.dragFlag = False
         self.objectDragged = None
+
 
     def keyPressed(self, keyCode, modifier):
         if (self.mode == "splashScreen"): 
@@ -149,12 +151,12 @@ class Game(PygameGame):
         if self.resetState:
             self.board = copy.deepcopy(self.boardObject.board)
             self.player.__init__()
+            self.scene = None # clear the winning/losing scene
             self.resetState = False
 
     def playGameRedrawAll(self, screen):
         # Draw the board
         self.boardObject.draw(screen)
-
 
         # Draw the control
         self.controlBar.draw(screen, self.width, self.height)
@@ -261,17 +263,17 @@ class Game(PygameGame):
         pos = (x, y)
         if(self.textRect1.collidepoint(pos)):
             print("1")
-            self.init()
+            self.init(1)
             self.mode = "playGame"
             self.level = 1
         elif(self.textRect2.collidepoint(pos)):
             print("2")
-            self.init()
+            self.init(2)
             self.level = 2
             self.mode = "playGame"
         elif(self.textRect3.collidepoint(pos)):
             print("3")
-            self.init()
+            self.init(3)
             self.level = 3
             self.mode = "playGame"
     def levelSelectionTimerFired(self, dt):
