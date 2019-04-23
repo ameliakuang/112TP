@@ -262,19 +262,17 @@ class Game(PygameGame):
         if(self.textRect1.collidepoint(pos)):
             print("1")
             self.init()
-            self.level = 1
             self.mode = "playGame"
+            self.level = 1
         elif(self.textRect2.collidepoint(pos)):
             print("2")
-            
             self.init()
             self.level = 2
             self.mode = "playGame"
         elif(self.textRect3.collidepoint(pos)):
             print("3")
-            
             self.init()
-            self.level3 = 3
+            self.level = 3
             self.mode = "playGame"
     def levelSelectionTimerFired(self, dt):
         pass
