@@ -39,38 +39,67 @@ class Board(object):
         #solution = solve(board)
         #if solution != None:
             #pass
-        return [[-1, 8, 0,0,0],
+        return [[-1, 0, 0,0,2],
                 [0, 0, 0,0,0],
                 [0, 0, 0,0,0],
-                [0, 8, 0,0,0],
-                [5, 0, 5,0,0]]
+                [0, 7, 0,0,0],
+                [4, 0, 0,0,1]]
 
     def draw(self, screen):
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 num = self.board[row][col]
-                # the player position and normal grids
-                if(num == -1) or (num == 0):
+                # the player position
+                if(num == -1):
+                    tile = DireTile(3)
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # normal tile
+                if (num == 0):
                     tile = Tile()
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # direction tiles
                 elif(num in range(1,5)):
                     tile = DireTile(num)
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # portal tiles
                 elif(num == 5):
                     tile = PortalTile()
                     tileImage = tile.image
                     tileRect = tile.rect
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                elif(num == 6):
+                    tile = JumpTile()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))                    
+                # cube
+                elif(num == 7):
+                    tile = Cube()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    iso_y -= self.halfTileHeight+5
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # target tiles
                 elif(num == 8):
                     tile = TargetTile()
                     tileImage = tile.image
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # jump tiles
+
+                # cube
+
+
+                # empty spots
                 else:
                     continue
         # for the player

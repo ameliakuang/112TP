@@ -33,6 +33,20 @@ class PortalTile(Tile):
         self.type = 5
 
 
+class JumpTile(Tile):
+    def __init__(self):
+        super(PortalTile, self).__init__()
+        self.image = pygame.image.load('images/tiles/jump.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.type = 6
+
+class Cube(Tile):
+    def __init__(self):
+        super(Cube, self).__init__()
+        self.image = pygame.image.load('images/tiles/cube.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.type = 7
+
 class TargetTile(Tile):
     def __init__(self):
         super(TargetTile, self).__init__()

@@ -8,6 +8,8 @@ class Player(pygame.sprite.Sprite):
 
         self.beginMoving = False
         self.illegalMove = False
+        self.win = False
+        # Player's current position
         self.row = 0
         self.col = 0
         self.drow = 0
@@ -24,12 +26,14 @@ class Player(pygame.sprite.Sprite):
     7: cube 
     8：target tiles
     '''
-
+    # either the player has moved out of the board
+    # or the player reaches somewhere empty
     def moveIllegal(self, board):
         rows = len(board)
         cols = len(board[0])
         if(self.row < 0) or (self.col < 0) or (self.row >= rows) or (self.col >= cols):
-            print("yes")
+            return True
+        if not ( board[self.row][self.col] in range(-1, 9)):
             return True
         return False
 
@@ -44,28 +48,29 @@ class Player(pygame.sprite.Sprite):
             ## up
             elif(num == 1):
                 self.currDire = "up"
-                self.drow = -1
-                self.dcol = 0
+                self.drow, self.dcol = -1,0
             ## right
             elif(num == 2):
                 self.currDire = "right"
-                self.drow = 0
-                self.dcol = -1
+                self.drow, self.dcol = 0, -1
             ## down
             elif(num == 3):
                 self.currDire = "down"
-                self.drow = 1
-                self.dcol = 0
+                self.drow, self.dcol = 1, 0
             ## left
             elif (num == 4):
                 self.currDire = "left"
-                self.drow = 0
-                self.dcol = 1
+                self.drow, self.dcol = 0, 1
             # check for portal tiles
             elif (num == 5):
                 self.drow, self.dcol = self.teleport(self.row, self.col, board)
+            elif(num == 8):
+                self.win = True
+                self.drow, self.dcol = 0,0
             self.row += self.drow
             self.col += self.dcol
+            self.board = board
+
 
     def teleport(self, row, col, board):
         rows = cols = len(board)

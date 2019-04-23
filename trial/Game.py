@@ -6,6 +6,7 @@ from Tiles import *
 from Control import *
 from Scene import *
 import utility
+import copy
 
 class Game(PygameGame):
     def init(self):
@@ -20,7 +21,7 @@ class Game(PygameGame):
         ## self.boardObject is an object of the class Board
         ## self.board is the 2d list representation of the board object
         self.boardObject = Board(5, self.player)
-        self.board = self.boardObject.board
+        self.board = copy.deepcopy(self.boardObject.board)
 
         # Control
         self.begin = Begin(self.width, self.height)
@@ -32,6 +33,10 @@ class Game(PygameGame):
         self.menu = Menu(self.width, self.height)
 
         self.controlBar = controlBar(self.width, self.height)
+
+        # Drag
+        self.dragFlag = False
+        self.objectDragged = None
 
     def keyPressed(self, keyCode, modifier):
         if (self.mode == "splashScreen"): 
@@ -56,6 +61,14 @@ class Game(PygameGame):
             self.levelSelectionMousePressed(x,y)
         elif (self.mode == "levelCreation"):
             self.levelCreationMousePressed(keyCode, modifier)
+
+    def mouseDrag(self, x, y):
+        if self.mode == "playGame":
+            self.playGameMouseDrag(x, y)
+
+    def mouseRelease(self, x, y):
+        if self.mode == "playGame":
+            self.playGameMouseRelease(x, y)
 
     def timerFired(self, dt):
         if (self.mode == "splashScreen"): 
@@ -87,6 +100,7 @@ class Game(PygameGame):
     ########################
     def playGameKeyPressed(self, keyCode, modifier):
         pass
+
     def playGameMousePressed(self, x, y):
         pos = (x, y)
         if(self.beginRect.collidepoint(pos)):
@@ -96,22 +110,55 @@ class Game(PygameGame):
         elif(self.menuRect.collidepoint(pos)):
             self.mode = "levelSelection"
 
+    def playGameMouseDrag(self, x, y):
+        pos = (x,y)
+
+        if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag:
+            print("here")
+            tile = Tile()
+            self.dragFlag = True
+            tile.rect.center = (pos[0]-70/2, pos[1]-44/2)
+            self.objectDragged = (tile, tile.rect.center)
+
+    def playGameMouseRelease(self, x, y, screen):
+        if self.dragFlag:
+            self.dragFlag = False
+            # draw the tile on the board
+            row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
+            if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
+                # check legality of putting a tile there
+                if(not self.board[row][col] in range(-1, 9)):
+                    self.board[row][col] = self.objectDragged[0].type
+
+
+
     def playGameTimerFired(self, dt):
         if self.player.beginMoving:
             if(not self.player.illegalMove):
                 self.playerGroup.update(self.board)
+                if(self.player.win):
+                    print("You win!")
             else:
                 self.player.row, self.player.col = (0,0)
                 print("You lose!")
+        if self.resetState:
+            self.board = copy.deepcopy(self.boardObject.board)
+            self.player.__init__()
+            self.resetState = False
 
     def playGameRedrawAll(self, screen):
         # Draw the board
         self.boardObject.draw(screen)
+
+
         # Draw the control
         self.controlBar.draw(screen, self.width, self.height)
         self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
+
+        if self.dragFlag and self.objectDragged != None:
+            screen.blit(self.objectDragged[0].image, self.objectDragged[1])
 
     ########################
     # splashScreen mode
@@ -183,7 +230,7 @@ class Game(PygameGame):
 
         textSurface7 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
         screen.blit(textSurface7, (self.width/2-60, self.height/2+130))  
-             
+
 
 
     ########################

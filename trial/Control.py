@@ -49,11 +49,13 @@ class controlBar(Control):
         portalTile = PortalTile()
         self.tileOptions.add(portalTile)
 
+        self.tileRectList = []
+
     def draw(self, screen, screenWidth, screenHeight):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         for tile in self.tileOptions:
             x, y = 10+80*tile.type, screenHeight-70
-            screen.blit(tile.image, (x, y))
+            self.tileRectList.append(screen.blit(tile.image, (x, y)))
             
 
 
