@@ -22,7 +22,7 @@ class PygameGame(object):
     def mousePressed(self, x, y):
         pass
 
-    def mouseReleased(self, x, y):
+    def mouseReleased(self, x, y, screen):
         pass
 
     def mouseMotion(self, x, y):
@@ -83,7 +83,7 @@ class PygameGame(object):
                     self.mousePressed(*(event.pos))
                 ## Mouse Released from left click
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                    self.mouseReleased(*(event.pos))
+                    self.mouseReleased(*(event.pos), screen)
                 ## Mouse move without clicking
                 elif (event.type == pygame.MOUSEMOTION and
                       event.buttons == (0, 0, 0)):

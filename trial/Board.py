@@ -18,8 +18,6 @@ class Board(object):
         
 
 
-
-
     # first randomly generate tiles, 
     # and then use backtracking to generate the board
     '''
@@ -33,17 +31,17 @@ class Board(object):
     9: empty spot
     '''
     def generateBoard(self, n, level):
-        if level != 1:
+        board = [[0] * n for row in range(n)]
+        if level == 0:
             return [[-1, 0, 0,0,0],
                     [0, 0, 0,0,0],
                     [8, 0, 0,0,0],
                     [6, 7, 0,0,0],
                     [9, 0, 0,0,1]]
         elif level == 1:
-            board = [[0] * n for row in range(n)]
             board[0][0] = -1
             board[n-1][n-1] = 8
-            # generate two possibilities
+            #  two possibilities
             temp = random.randint(1, 3)
             # two spots for portal tiles
             if(temp == 1):
@@ -51,18 +49,23 @@ class Board(object):
                 row_on_last_col = random.randint(1, n-2)
                 board[row_on_0th_col][0] = 9
                 board[row_on_last_col][n-1] = 9
+            # one spot for direction tile on the corner
             elif(temp == 2):   
                 board[n-1][0] = 9
+            # two spots for two direction tiles
             else:
                 row_on_0th_col = random.randint(1, n-2)
                 board[row_on_0th_col][0] = 9
                 board[row_on_0th_col][n-1] = 9
             return board
+        elif level == 2:
+            pass
 
-    def draw(self, screen):
-        for row in range(len(self.board)):
-            for col in range(len(self.board[0])):
-                num = self.board[row][col]
+
+    def draw(self, screen, board):
+        for row in range(len(board)):
+            for col in range(len(board[0])):
+                num = board[row][col]
                 # the player position
                 if(num == -1):
                     tile = DireTile(3)
@@ -88,6 +91,7 @@ class Board(object):
                     tileRect = tile.rect
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
+                # jump
                 elif(num == 6):
                     tile = JumpTile()
                     tileImage = tile.image

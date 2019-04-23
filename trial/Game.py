@@ -4,7 +4,6 @@ from Board import *
 from Player import *
 from Tiles import *
 from Control import *
-import os
 import utility
 import copy
 
@@ -72,9 +71,9 @@ class Game(PygameGame):
         if self.mode == "playGame":
             self.playGameMouseDrag(x, y)
 
-    def mouseRelease(self, x, y):
+    def mouseReleased(self, x, y, screen):
         if self.mode == "playGame":
-            self.playGameMouseRelease(x, y)
+            self.playGameMouseReleased(x, y, screen)
 
     def timerFired(self, dt):
         if (self.mode == "splashScreen"): 
@@ -120,13 +119,55 @@ class Game(PygameGame):
         pos = (x,y)
 
         if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag:
-            print("here")
+            # print(pos)
+            # print(self.controlBar.tileRectList[0])
+            # print("here")
             tile = Tile()
             self.dragFlag = True
-            tile.rect.center = (pos[0]-70/2, pos[1]-44/2)
-            self.objectDragged = (tile, tile.rect.center)
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
 
-    def playGameMouseRelease(self, x, y, screen):
+        elif self.controlBar.tileRectList[1].collidepoint(pos) or self.dragFlag:
+            print("dire", self.controlBar.tileRectList[1])
+            tile = DireTile(1)
+            self.dragFlag = True
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
+            print(self.objectDragged[0], self.objectDragged[0].type)
+
+        elif self.controlBar.tileRectList[2].collidepoint(pos) or self.dragFlag:
+            tile = DireTile(2)
+            self.dragFlag = True
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
+
+        elif self.controlBar.tileRectList[3].collidepoint(pos) or self.dragFlag:
+            tile = DireTile(3)
+            self.dragFlag = True
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
+
+        elif self.controlBar.tileRectList[4].collidepoint(pos) or self.dragFlag:
+            tile = DireTile(4)
+            self.dragFlag = True
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
+
+        elif self.controlBar.tileRectList[5].collidepoint(pos) or self.dragFlag:
+            tile = PortalTile()
+            self.dragFlag = True
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
+
+        elif self.controlBar.tileRectList[6].collidepoint(pos) or self.dragFlag:
+            tile = JumpTile()
+            self.dragFlag = True
+            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+            self.objectDragged = (tile, pos)
+
+
+
+    def playGameMouseReleased(self, x, y, screen):
         if self.dragFlag:
             self.dragFlag = False
             # draw the tile on the board
@@ -135,8 +176,6 @@ class Game(PygameGame):
                 # check legality of putting a tile there
                 if(not self.board[row][col] in range(-1, 9)):
                     self.board[row][col] = self.objectDragged[0].type
-
-
 
     def playGameTimerFired(self, dt):
         if self.player.beginMoving:
@@ -156,7 +195,7 @@ class Game(PygameGame):
 
     def playGameRedrawAll(self, screen):
         # Draw the board
-        self.boardObject.draw(screen)
+        self.boardObject.draw(screen, self.board)
 
         # Draw the control
         self.controlBar.draw(screen, self.width, self.height)
@@ -164,8 +203,9 @@ class Game(PygameGame):
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
 
-        if self.dragFlag and self.objectDragged != None:
+        if self.dragFlag:
             screen.blit(self.objectDragged[0].image, self.objectDragged[1])
+            print("what is blitted", self.objectDragged[0])
 
         #Scene
         if(self.scene != None):
