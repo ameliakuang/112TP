@@ -402,7 +402,7 @@ class CustomScene(object):
 
             font = pygame.font.Font("freesansbold.ttf", 20)
 
-            textSurface = font.render("Press any key to restart", True, (255, 255, 0))
+            textSurface = font.render("Press any key to try again", True, (255, 255, 0))
             textRect = textSurface.get_rect()
             textRect.centerx = screen.get_rect().centerx
             textRect.centery = screen.get_rect().centery+50

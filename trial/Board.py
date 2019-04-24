@@ -8,7 +8,7 @@ import random
 class Board(object):
     def __init__(self, n, player, level):
         self.rows = self.cols = n
-        self.board = self.generateBoard(n, 0)
+        self.board = self.generateBoard(n, level)
         self.player = player
         self.level = level
 
