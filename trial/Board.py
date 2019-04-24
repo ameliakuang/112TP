@@ -8,7 +8,7 @@ import random
 class Board(object):
     def __init__(self, n, player, level):
         self.rows = self.cols = n
-        self.board = self.generateBoard(n, level)
+        self.board = self.generateBoard(n, 0)
         self.player = player
         self.level = level
 
@@ -39,7 +39,7 @@ class Board(object):
                     [0, 0, 0,0,0],
                     [8, 0, 0,0,0],
                     [6, 7, 0,0,0],
-                    [9, 0, 0,0,1]]
+                    [9, 0, 0,0,7]]
         elif level == 1:
             board[n-1][n-1] = 8
             #  two possibilities
@@ -74,7 +74,35 @@ class Board(object):
                 board[row][tempCol] = 9
             return board
         elif level == 3:
-            pass
+            col = random.choice([n-2, n-3, n-1])
+            if(col == n-3) or (col == n-2):
+                row_on_that_col = random.randint(2, n-3)
+
+                board[row_on_that_col][col] = 8
+                board[row_on_that_col][col-1] = 9
+                board[row_on_that_col][col-4] = 9
+                board[row_on_that_col][col-3] = 7
+                for row in range(1, n):
+                    board[row][col-1] = 9
+                board[row_on_that_col][0] = 9
+
+            else:
+                board[0][col] = 8
+                row_for_cube = random.randint(2, n-3)
+                col_for_cube = random.randint(2, n-3)
+                board[row_for_cube][col_for_cube] = 7
+                board[row_for_cube][col_for_cube-1] = 9
+                board[row_for_cube][col] = 9
+                board[row_for_cube][0] = 9
+                if(n != 6):
+                    print("bla")
+                    for row in range(row_for_cube+1, n):
+                        board[row][col_for_cube] = 9
+                for row in range(0, n-3):
+                    board[row][col-2] = 9
+            
+            return board
+
 
 
 
@@ -121,7 +149,7 @@ class Board(object):
                     tileImage = tile.image
                     tileRect = tile.rect
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
-                    iso_y -= self.halfTileHeight+5
+                    iso_y -= self.halfTileHeight+8
                     screen.blit(tileImage, (iso_x, iso_y))
                 # target tiles
                 elif(num == 8):
