@@ -27,9 +27,9 @@ class Game(PygameGame):
         else:
             n = 5
         self.boardObject = Board(n, self.player, self.level)
-        print("board level", self.level)
+        #print("board level", self.level)
         self.board = copy.deepcopy(self.boardObject.board)
-        print(self.board)
+        #print(self.board)
         
         self.scene = None
 
@@ -109,7 +109,12 @@ class Game(PygameGame):
     # playGame mode
     ########################
     def playGameKeyPressed(self, keyCode, modifier):
-        pass
+        if self.scene.state == False:
+            self.player.__init__()
+            self.scene.state = None
+            self.scene = None # clear the winning/losing scene
+            
+
 
     def playGameMousePressed(self, x, y):
         pos = (x, y)
@@ -203,6 +208,7 @@ class Game(PygameGame):
             self.player.__init__()
             self.scene = None # clear the winning/losing scene
             self.resetState = False
+
 
     def playGameRedrawAll(self, screen):
         # Draw the board
@@ -379,13 +385,28 @@ class CustomScene(object):
             rect = image.get_rect()
             rect.centerx = screen.get_rect().centerx
             rect.centery = screen.get_rect().centery-50
+            font = pygame.font.Font("freesansbold.ttf", 20)
+
+            textSurface = font.render("Select a new level by clicking the menu button", True, (255, 255, 0))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery+80
+            screen.blit(textSurface, textRect)
         # Lose
         else:
             image = pygame.image.load('images/game-over.png').convert()
             rect = image.get_rect()
             image.set_colorkey((0,0,0))
             rect.centerx = screen.get_rect().centerx
-            rect.centery = screen.get_rect().centerx-50
+            rect.centery = screen.get_rect().centery-100
+
+            font = pygame.font.Font("freesansbold.ttf", 20)
+
+            textSurface = font.render("Press any key to restart", True, (255, 255, 0))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery+50
+            screen.blit(textSurface, textRect)
         screen.blit(image, rect)
     
 
