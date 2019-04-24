@@ -46,7 +46,6 @@ class Player(pygame.sprite.Sprite):
         if(not self.illegalMove):
             num = board[self.row][self.col]
             if(num == -1):
-                print("bla")
                 self.drow = 1
                 self.dcol = 0
             # check for direction tiles
