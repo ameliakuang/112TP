@@ -44,8 +44,7 @@ class Game(PygameGame):
 
         self.controlBar = controlBar(self.width, self.height)
 
-
-        self.dragFlag = False
+        self.dragFlag = [False]*7
         self.objectDragged = None
 
 
@@ -124,65 +123,70 @@ class Game(PygameGame):
     def playGameMouseDrag(self, x, y):
         pos = (x,y)
 
-        if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag:
+
+        if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag[0]:
             print(pos)
             print(self.controlBar.tileRectList[0])
             print("here")
             tile = Tile()
-            self.dragFlag = True
+            self.dragFlag[0] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[1].collidepoint(pos) or self.dragFlag:
+        elif self.controlBar.tileRectList[1].collidepoint(pos) or self.dragFlag[1]:
             print("dire", self.controlBar.tileRectList[1])
             tile = DireTile(1)
-            self.dragFlag = True
+            self.dragFlag[1] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
             print(self.objectDragged[0], self.objectDragged[0].type)
 
-        elif self.controlBar.tileRectList[2].collidepoint(pos) or self.dragFlag:
+        elif self.controlBar.tileRectList[2].collidepoint(pos) or self.dragFlag[2]:
             tile = DireTile(2)
-            self.dragFlag = True
+            self.dragFlag[2] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[3].collidepoint(pos) or self.dragFlag:
+        elif self.controlBar.tileRectList[3].collidepoint(pos) or self.dragFlag[3]:
             tile = DireTile(3)
-            self.dragFlag = True
+            self.dragFlag[3] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[4].collidepoint(pos) or self.dragFlag:
+        elif self.controlBar.tileRectList[4].collidepoint(pos) or self.dragFlag[4]:
             tile = DireTile(4)
-            self.dragFlag = True
+            self.dragFlag[4] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[5].collidepoint(pos) or self.dragFlag:
+        elif self.controlBar.tileRectList[5].collidepoint(pos) or self.dragFlag[5]:
             tile = PortalTile()
-            self.dragFlag = True
+            self.dragFlag[5] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[6].collidepoint(pos) or self.dragFlag:
+        elif self.controlBar.tileRectList[6].collidepoint(pos) or self.dragFlag[6]:
             tile = JumpTile()
-            self.dragFlag = True
+            self.dragFlag[6] = True
             pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
             self.objectDragged = (tile, pos)
 
 
     def playGameMouseReleased(self, x, y, screen):
-        if self.dragFlag:
-            self.dragFlag = False
-            # draw the tile on the board
-            row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
-            if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
-                # check legality of putting a tile there
-                if(self.board[row][col] == 9):
-                    self.board[row][col] = self.objectDragged[0].type
-                else:
-                    self.objectDragged = None
+        index = 0
+        while(index < len(self.dragFlag)):
+            dragFlag = self.dragFlag[index]
+            if dragFlag:
+                self.dragFlag[index] = False
+                # draw the tile on the board
+                row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
+                if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
+                    # check legality of putting a tile there
+                    if(self.board[row][col] == 9):
+                        self.board[row][col] = self.objectDragged[0].type
+                    else:
+                        self.objectDragged = None
+            index += 1
 
     def playGameTimerFired(self, dt):
         if self.player.beginMoving:
@@ -210,9 +214,10 @@ class Game(PygameGame):
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
 
-        if self.dragFlag:
-            screen.blit(self.objectDragged[0].image, self.objectDragged[1])
-            print("what is blitted", self.objectDragged[0])
+        for dragFlag in self.dragFlag:
+            if dragFlag:
+                screen.blit(self.objectDragged[0].image, self.objectDragged[1])
+                print("what is blitted", self.objectDragged[0])
 
         #Scene
         if(self.scene != None):
@@ -372,14 +377,16 @@ class CustomScene(object):
             image = pygame.image.load('images/You Win.png').convert()
             image.set_colorkey((0,0,0))
             rect = image.get_rect()
-            rect.center = (screen.get_rect().centerx, screen.get_rect().centery)
+            rect.centerx = screen.get_rect().centerx
+            rect.centery = screen.get_rect().centery-50
         # Lose
         else:
             image = pygame.image.load('images/game-over.png').convert()
             rect = image.get_rect()
             image.set_colorkey((0,0,0))
-            rect.center = (screen.get_rect().centerx, screen.get_rect().centery)
-        screen.blit(image, rect.center)
+            rect.centerx = screen.get_rect().centerx
+            rect.centery = screen.get_rect().centerx-50
+        screen.blit(image, rect)
     
 
 game = Game()
