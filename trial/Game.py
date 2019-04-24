@@ -70,7 +70,7 @@ class Game(PygameGame):
         elif (self.mode == "levelSelection"):
             self.levelSelectionMousePressed(x,y)
         elif (self.mode == "levelCreation"):
-            self.levelCreationMousePressed(keyCode, modifier)
+            self.levelCreationMousePressed(x,y)
 
     def mouseDrag(self, x, y):
         if self.mode == "playGame":
@@ -90,7 +90,7 @@ class Game(PygameGame):
         elif (self.mode == "levelSelection"):
             self.levelSelectionTimerFired(dt)
         elif (self.mode == "levelCreation"):
-            self.levelCreationTimerFired(keyCode, modifier)
+            self.levelCreationTimerFired(dt)
 
 
     def redrawAll(self, screen):
@@ -103,13 +103,13 @@ class Game(PygameGame):
         elif (self.mode == "levelSelection"):
             self.levelSelectionRedrawAll(screen)
         elif (self.mode == "levelCreation"):
-            self.levelCreationRedrawAll(keyCode, modifier)
+            self.levelCreationRedrawAll(screen)
 
     ########################
     # playGame mode
     ########################
     def playGameKeyPressed(self, keyCode, modifier):
-        if self.scene.state == False:
+        if self.scene != None and self.scene.state == False:
             self.player.__init__()
             self.scene.state = None
             self.scene = None # clear the winning/losing scene
@@ -128,53 +128,48 @@ class Game(PygameGame):
     def playGameMouseDrag(self, x, y):
         pos = (x,y)
 
+        if self.controlBar.tileRectList != None:
+            if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag[0]:
+                tile = Tile()
+                self.dragFlag[0] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
-        if self.controlBar.tileRectList[0].collidepoint(pos) or self.dragFlag[0]:
-            print(pos)
-            print(self.controlBar.tileRectList[0])
-            print("here")
-            tile = Tile()
-            self.dragFlag[0] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
+            elif self.controlBar.tileRectList[1].collidepoint(pos) or self.dragFlag[1]:
+                tile = DireTile(1)
+                self.dragFlag[1] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[1].collidepoint(pos) or self.dragFlag[1]:
-            print("dire", self.controlBar.tileRectList[1])
-            tile = DireTile(1)
-            self.dragFlag[1] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
-            print(self.objectDragged[0], self.objectDragged[0].type)
+            elif self.controlBar.tileRectList[2].collidepoint(pos) or self.dragFlag[2]:
+                tile = DireTile(2)
+                self.dragFlag[2] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[2].collidepoint(pos) or self.dragFlag[2]:
-            tile = DireTile(2)
-            self.dragFlag[2] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
+            elif self.controlBar.tileRectList[3].collidepoint(pos) or self.dragFlag[3]:
+                tile = DireTile(3)
+                self.dragFlag[3] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[3].collidepoint(pos) or self.dragFlag[3]:
-            tile = DireTile(3)
-            self.dragFlag[3] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
+            elif self.controlBar.tileRectList[4].collidepoint(pos) or self.dragFlag[4]:
+                tile = DireTile(4)
+                self.dragFlag[4] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[4].collidepoint(pos) or self.dragFlag[4]:
-            tile = DireTile(4)
-            self.dragFlag[4] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
+            elif self.controlBar.tileRectList[5].collidepoint(pos) or self.dragFlag[5]:
+                tile = PortalTile()
+                self.dragFlag[5] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
-        elif self.controlBar.tileRectList[5].collidepoint(pos) or self.dragFlag[5]:
-            tile = PortalTile()
-            self.dragFlag[5] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
-
-        elif self.controlBar.tileRectList[6].collidepoint(pos) or self.dragFlag[6]:
-            tile = JumpTile()
-            self.dragFlag[6] = True
-            pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-            self.objectDragged = (tile, pos)
+            elif self.controlBar.tileRectList[6].collidepoint(pos) or self.dragFlag[6]:
+                tile = JumpTile()
+                self.dragFlag[6] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
 
 
     def playGameMouseReleased(self, x, y, screen):
@@ -223,7 +218,6 @@ class Game(PygameGame):
         for dragFlag in self.dragFlag:
             if dragFlag:
                 screen.blit(self.objectDragged[0].image, self.objectDragged[1])
-                print("what is blitted", self.objectDragged[0])
 
         #Scene
         if(self.scene != None):
@@ -278,7 +272,7 @@ class Game(PygameGame):
     # help mode
     ########################
     def helpKeyPressed(self, keyCode, modifier):
-        pass
+        self.mode = "levelSelection"
     def helpMousePressed(self, x, y):
         self.mode = "splashScreen"
     def helpTimerFired(self, dt):
@@ -304,11 +298,14 @@ class Game(PygameGame):
         textSurface5 = font3.render("~Click on the restart button to restart the game~", True, (255, 255, 255))
         screen.blit(textSurface5, (self.width/2-300, self.height/2+30))  
 
-        textSurface6 = font3.render("~Click anywhere to go back and select a level~", True, (255, 255, 255))
-        screen.blit(textSurface6, (self.width/2-300, self.height/2+80))      
+        textSurface6 = font3.render("~Press any key to select a level~", True, (255, 255, 255))
+        screen.blit(textSurface6, (self.width/2-300, self.height/2+80))  
 
-        textSurface7 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
-        screen.blit(textSurface7, (self.width/2-60, self.height/2+130))  
+        textSurface7 = font3.render("~Click anywhere to go back to the splash screen~", True, (255, 255, 255))
+        screen.blit(textSurface7, (self.width/2-300, self.height/2+130))    
+
+        textSurface8 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
+        screen.blit(textSurface8, (self.width/2-60, self.height/2+180))  
 
 
 
@@ -320,17 +317,14 @@ class Game(PygameGame):
     def levelSelectionMousePressed(self, x, y):
         pos = (x, y)
         if(self.textRect1.collidepoint(pos)):
-            print("1")
             self.init(1)
             self.mode = "playGame"
             self.level = 1
         elif(self.textRect2.collidepoint(pos)):
-            print("2")
             self.init(2)
             self.level = 2
             self.mode = "playGame"
         elif(self.textRect3.collidepoint(pos)):
-            print("3")
             self.init(3)
             self.level = 3
             self.mode = "playGame"
@@ -367,12 +361,18 @@ class Game(PygameGame):
     def levelCreationKeyPressed(self, keyCode, modifier):
         pass
     def levelCreationMousePressed(self, x, y):
-        self.mode = "help"
+        self.mode = "splashScreen"
     def levelCreationTimerFired(self, dt):
         pass
     def levelCreationRedrawAll(self, screen):
-        pass
+        font2 = pygame.font.Font("freesansbold.ttf", 50)
 
+        levelCreationSurf = font2.render("Level Creation", True, (255, 255, 255), (205,140,149))
+        self.levelCreationRect = levelCreationSurf.get_rect()
+        self.levelCreationRect.center = (self.width//2, 40)
+        screen.blit(levelCreationSurf, self.levelCreationRect)
+# Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
+# I changed the specific image loaded and add the interaction with the player
 class CustomScene(object):
     def __init__(self, state):
         self.state = state

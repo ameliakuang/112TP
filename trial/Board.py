@@ -95,7 +95,6 @@ class Board(object):
                 board[row_for_cube][col] = 9
                 board[row_for_cube][0] = 9
                 if(n != 6):
-                    print("bla")
                     for row in range(row_for_cube+1, n):
                         board[row][col_for_cube] = 9
                 for row in range(0, n-3):
