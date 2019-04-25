@@ -1,4 +1,5 @@
 import pygame
+import utility
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -28,6 +29,7 @@ class Player(pygame.sprite.Sprite):
     '''
     # either the player has moved out of the board
     # or the player reaches somewhere empty
+    # or the player is on the cube but the previous tile is not a jump tile
     def moveIllegal(self, board):
         rows = len(board)
         cols = len(board[0])
@@ -35,6 +37,8 @@ class Player(pygame.sprite.Sprite):
             return True
         if not ( board[self.row][self.col] in range(-1, 9)):
             return True
+        if board[self.row][self.col] == 7 and not board[self.row-self.drow][self.col-self.dcol] == 6:
+            return True 
         return False
 
     def update(self, board):
@@ -64,9 +68,30 @@ class Player(pygame.sprite.Sprite):
             # check for portal tiles
             elif (num == 5):
                 self.drow, self.dcol = self.teleport(self.row, self.col, board)
+            elif (num == 6):
+                if self.currDire == "up":
+                    self.drow = -1
+                    self.dcol = 0
+                elif self.currDire == "right":
+                    self.drow, self.dcol = 0, -1
+                elif self.currDire == "down":
+                    self.drow, self.dcol = 1, 0
+                elif self.currDire == "left":
+                    self.drow, self.dcol = 0,1
+            elif (num == 7):
+                if self.currDire == "left":
+                    self.drow = 0
+                    self.dcol = 1
+                elif self.currDire == "right":
+                    self.drow, self.dcol = 0, -1
+                elif self.currDire == "up":
+                    self.drow, self.dcol = -1, 0
+                elif self.currDire == "down":
+                    self.drow, self.dcol = 1, 0
             elif(num == 8):
                 self.win = True
                 self.drow, self.dcol = 0,0
+
             self.row += self.drow
             self.col += self.dcol
             self.board = board
@@ -87,6 +112,22 @@ class Player(pygame.sprite.Sprite):
             return (1, 0)
         elif(self.currDire == "left"):
             return (0, 1)
+
+    def draw(self, screen, board, cols, halfWidth, halfHeight):
+        if self.row < cols and 0 <= self.row and self.col < cols and 0 <= self.col and board[self.row][self.col] == 7:
+            iso_x, iso_y = utility.mapToIso(self.row, self.col, cols, halfWidth, halfHeight, screen)
+            playerGroup = pygame.sprite.GroupSingle(self)
+            # iso_y-15 to makes the player looks like higher than the board
+            self.rect.x, self.rect.y = iso_x, iso_y-50
+            self.image.set_colorkey((255,255,255))
+            screen.blit(self.image, (self.rect.x,self.rect.y))
+        else:
+            iso_x, iso_y = utility.mapToIso(self.row, self.col, cols, halfWidth, halfHeight, screen)
+            playerGroup = pygame.sprite.GroupSingle(self)
+            # iso_y-15 to makes the player looks like higher than the board
+            self.rect.x, self.rect.y = iso_x, iso_y-15
+            self.image.set_colorkey((255,255,255))
+            screen.blit(self.image, (self.rect.x,self.rect.y))
 
 
 

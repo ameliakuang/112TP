@@ -13,7 +13,7 @@ def mapToIso(row, col, cols, halfWidth, halfHeight, screen):
     newIso_y = iso_y + screen.get_rect().centery - cols*halfHeight
     return (newIso_x, newIso_y)
     
-
+# Citation: http://clintbellanger.net/articles/isometric_math/
 def isoToMap(iso_x, iso_y, cols, halfWidth, halfHeight, screen):
     iso_x = iso_x - screen.get_rect().centerx + halfWidth - halfWidth
     iso_y = iso_y - screen.get_rect().centery + halfHeight*cols - halfHeight

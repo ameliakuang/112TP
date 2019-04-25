@@ -35,7 +35,7 @@ class Menu(Control):
 class controlBar(Control):
     def __init__(self, screenWidth, screenHeight):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((screenWidth-100, 250))
+        self.image = pygame.Surface((screenWidth-100, 200))
         self.image.fill((255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -47,7 +47,9 @@ class controlBar(Control):
             direTile = DireTile(i)
             self.tileOptions.add(direTile)
         portalTile = PortalTile()
+        jumpTile = JumpTile()
         self.tileOptions.add(portalTile)
+        self.tileOptions.add(jumpTile)
 
         self.tileRectList = []
 
