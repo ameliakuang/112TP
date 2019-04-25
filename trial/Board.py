@@ -2,22 +2,21 @@ import pygame
 from Player import Player
 from Tiles import *
 import utility
+import random
 
 
 class Board(object):
-    def __init__(self, n, player):
+    def __init__(self, n, player, level):
         self.rows = self.cols = n
-        self.board = Board.generateBoard(n)
-        self.controlBar = Board.generateControlBar(self.board)
+        self.board = self.generateBoard(n, level)
         self.player = player
+        self.level = level
 
-        self.tileWidth = 72
-        self.tileHeight = 72
+        self.tileWidth = 70
+        self.tileHeight = 44
         self.halfTileWidth = self.tileWidth//2
         self.halfTileHeight = self.tileHeight//2
-
-        self.options = pygame.sprite.Group()
-
+        
 
 
     # first randomly generate tiles, 
@@ -30,77 +29,140 @@ class Board(object):
     6: jump tiles
     7: cube 
     8：target tiles
+    9: empty spot
     '''
-    @staticmethod
-    def generateBoard(n):
-        board = [
-            [0, 0, 1, 2, 3],
-            [4, -1, 0, 0, 0],
-            [0, 0, 5, 6, 0],
-            [0, 0, 0, 7, 0],
-            [0, 0, 0, 0, 0],
-            ]    
-        return board
+    def generateBoard(self, n, level):
+        board = [[0] * n for row in range(n)]
+        board[0][0] = -1
+        if level == 0:
+            return [[-1, 0, 0,0,0],
+                    [6, 0, 0,0,0],
+                    [6, 6, 7,0,0],
+                    [7, 6, 7,0,0],
+                    [4, 0, 6,7,0]]
+        elif level == 1:
+            board[n-1][n-1] = 8
+            #  two possibilities
+            temp = random.randint(1, 3)
+            # two spots for portal tiles
+            if(temp == 1):
+                row_on_0th_col = random.randint(1, n-2)
+                row_on_last_col = random.randint(1, n-2)
+                board[row_on_0th_col][0] = 9
+                board[row_on_last_col][n-1] = 9
+            # one spot for direction tile on the corner
+            elif(temp == 2):   
+                board[n-1][0] = 9
+            # two spots for two direction tiles
+            else:
+                row_on_0th_col = random.randint(1, n-2)
+                board[row_on_0th_col][0] = 9
+                board[row_on_0th_col][n-1] = 9
+            return board
+        elif level == 2:
+            # ensure that a pair of direction tiles can be put
+            row_on_0th_col = random.randint(1, n-1)
+            row_on_last_col = row_on_0th_col
+            board[row_on_0th_col][0] = 9
+            board[row_on_last_col][n-1] = 9
+
+            row_on_last_col_for_target = random.randint(0, n-2)
+            board[row_on_last_col_for_target][n-1] = 8
+            
+            tempCol = random.randint(1, n-2)
+            for row in range(1,n-1):
+                board[row][tempCol] = 9
+            return board
+        elif level == 3:
+            col = random.choice([n-2, n-3, n-1])
+            if(col == n-3) or (col == n-2):
+                row_on_that_col = random.randint(2, n-3)
+
+                board[row_on_that_col][col] = 8
+                board[row_on_that_col][col-1] = 9
+                board[row_on_that_col][col-4] = 9
+                board[row_on_that_col][col-3] = 7
+                for row in range(1, n):
+                    board[row][col-1] = 9
+                board[row_on_that_col][0] = 9
+
+            else:
+                board[0][col] = 8
+                row_for_cube = random.randint(2, n-3)
+                col_for_cube = random.randint(2, n-3)
+                board[row_for_cube][col_for_cube] = 7
+                board[row_for_cube][col_for_cube-1] = 9
+                board[row_for_cube][col] = 9
+                board[row_for_cube][0] = 9
+                if(n != 6):
+                    for row in range(row_for_cube+1, n):
+                        board[row][col_for_cube] = 9
+                for row in range(0, n-3):
+                    board[row][col-2] = 9
+            
+            return board
 
 
 
-    @staticmethod
-    def generateControlBar(board):
+
+
+    def draw(self, screen, board):
         for row in range(len(board)):
             for col in range(len(board[0])):
                 num = board[row][col]
-                if num != -1 or num != 0:
-                    pass
-
-
-
-
-
-    def draw(self, screen):
-        for row in range(len(self.board)):
-            for col in range(len(self.board[0])):
-                num = self.board[row][col]
-                # the player position and normal grids
-                if(num == -1) or (num == 0):
+                # the player position
+                if(num == -1):
+                    tile = DireTile(3)
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # normal tile
+                if (num == 0):
                     tile = Tile()
                     tileImage = tile.image
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    screen.blit(tileImage, (centered_x, centered_y))
-                elif(num in range(1,4)):
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # direction tiles
+                elif(num in range(1,5)):
                     tile = DireTile(num)
                     tileImage = tile.image
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    screen.blit(tileImage, (centered_x, centered_y))
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # portal tiles
                 elif(num == 5):
                     tile = PortalTile()
                     tileImage = tile.image
                     tileRect = tile.rect
-                    iso_x, iso_y = utility.mapToIso(row, col, self.halfTileWidth, self.halfTileHeight)
-                    centered_x = screen.get_rect().centerx + iso_x
-                    centered_y = screen.get_rect().centery//2 + iso_y
-                    
-                    #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, tileRect[2], tileRect[3]))
-                    screen.blit(tileImage, (centered_x, centered_y))
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # jump
+                elif(num == 6):
+                    tile = JumpTile()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))                    
+                # cube
+                elif(num == 7):
+                    tile = Cube()
+                    tileImage = tile.image
+                    tileRect = tile.rect
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    iso_y -= self.halfTileHeight+8
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # target tiles
+                elif(num == 8):
+                    tile = TargetTile()
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+                # empty spots
                 else:
                     continue
+        # for the player
+        self.player.draw(screen, board, self.cols, self.halfTileWidth, self.halfTileHeight)
 
-        iso_x, iso_y = utility.mapToIso(1, 1, self.halfTileWidth, self.halfTileHeight)
-        centered_x = screen.get_rect().centerx + iso_x
-        centered_y = screen.get_rect().centery//2 + iso_y
-        playerGroup = pygame.sprite.GroupSingle(self.player)
-        # centered_y-10 to makes the player looks like higher than the board
-        self.player.rect.x, self.player.rect.y = centered_x, centered_y-10
-        self.player.image.set_colorkey((255,255,255))
-        #pygame.draw.rect(screen, (0,0,0), (centered_x, centered_y, 70, 44))
-        screen.blit(self.player.image, (self.player.rect.x,self.player.rect.y))
         
         
-
-
-
 
 

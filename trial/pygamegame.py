@@ -22,7 +22,7 @@ class PygameGame(object):
     def mousePressed(self, x, y):
         pass
 
-    def mouseReleased(self, x, y):
+    def mouseReleased(self, x, y, screen):
         pass
 
     def mouseMotion(self, x, y):
@@ -34,7 +34,7 @@ class PygameGame(object):
     def keyPressed(self, keyCode, modifier):
         pass
 
-    def keyReleased(self, keyCode, modifier):
+    def keyReleased(self, keyCode, modifier, screen):
         pass
 
     def timerFired(self, dt):
@@ -47,13 +47,17 @@ class PygameGame(object):
         ''' return whether a specific key is being held '''
         return self._keys.get(key, False)
 
-    def __init__(self, width=600, height=400, fps=50, title="Pendo"):
+    def __init__(self, width=800, height=600, fps=5, title="Pendo"):
         self.width = width
         self.height = height
         self.fps = fps
         self.title = title
         self.bgColor = (255, 255, 255)
         pygame.init()
+        pygame.mixer.music.load("deep-nature.mp3")
+        pygame.mixer.music.set_volume(0.5)
+
+
 
     def run(self):
 
@@ -68,6 +72,7 @@ class PygameGame(object):
         # call game-specific initialization
         self.init()
         playing = True
+        pygame.mixer.music.play(loops=-1)
         while playing:
             time = clock.tick(self.fps)
             self.timerFired(time)
@@ -78,7 +83,7 @@ class PygameGame(object):
                     self.mousePressed(*(event.pos))
                 ## Mouse Released from left click
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                    self.mouseReleased(*(event.pos))
+                    self.mouseReleased(*(event.pos), screen)
                 ## Mouse move without clicking
                 elif (event.type == pygame.MOUSEMOTION and
                       event.buttons == (0, 0, 0)):
@@ -95,7 +100,7 @@ class PygameGame(object):
                 ## Release Key
                 elif event.type == pygame.KEYUP:
                     self._keys[event.key] = False
-                    self.keyReleased(event.key, event.mod)
+                    self.keyReleased(event.key, event.mod, screen)
                 # Quit
                 elif event.type == pygame.QUIT:
                     playing = False
