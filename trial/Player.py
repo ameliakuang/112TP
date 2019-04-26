@@ -5,6 +5,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
         self.image = pygame.image.load('images/circle.png').convert()
+        self.image.set_colorkey((255,255,255))
         self.rect = self.image.get_rect()
 
         self.beginMoving = False
@@ -119,14 +120,14 @@ class Player(pygame.sprite.Sprite):
             playerGroup = pygame.sprite.GroupSingle(self)
             # iso_y-15 to makes the player looks like higher than the board
             self.rect.x, self.rect.y = iso_x, iso_y-50
-            self.image.set_colorkey((255,255,255))
+            #self.image.set_colorkey((255,255,255))
             screen.blit(self.image, (self.rect.x,self.rect.y))
         else:
             iso_x, iso_y = utility.mapToIso(self.row, self.col, cols, halfWidth, halfHeight, screen)
             playerGroup = pygame.sprite.GroupSingle(self)
             # iso_y-15 to makes the player looks like higher than the board
             self.rect.x, self.rect.y = iso_x, iso_y-15
-            self.image.set_colorkey((255,255,255))
+            #self.image.set_colorkey((255,255,255))
             screen.blit(self.image, (self.rect.x,self.rect.y))
 
 

@@ -45,7 +45,7 @@ class Game(PygameGame):
 
         self.controlBar = controlBar(self.width, self.height)
 
-        self.dragFlag = [False]*7
+        self.dragFlag = [False]*10
         self.objectDragged = None
 
 
@@ -186,8 +186,11 @@ class Game(PygameGame):
                 # draw the tile on the board
                 row, col = utility.isoToMap(x, y, len(self.board), 35, 22, screen)
                 if(row >= 0) and (row < len(self.board)) and (col >= 0) and (col < len(self.board)):
+                    if(isinstance(self.objectDragged[0], Player)) and self.board[row][col] != -1:
+                        self.player.row = row
+                        self.player.col = col
                     # check legality of putting a tile there
-                    if(self.board[row][col] == 9):
+                    elif(self.board[row][col] == 9) or self.board[row][col] == 10:
                         self.board[row][col] = self.objectDragged[0].type
                     else:
                         self.objectDragged = None
@@ -243,6 +246,7 @@ class Game(PygameGame):
         elif(self.levelCreationRect.collidepoint(pos)):
             self.init(4)
             self.mode = "levelCreation"
+            self.player.row, self.player.col = -10, -10
         elif(self.helpRect.collidepoint(pos)):
             self.mode = "help"
 
@@ -367,18 +371,49 @@ class Game(PygameGame):
     # levelCreation mode
     ########################
     def levelCreationKeyPressed(self, keyCode, modifier):
-        pass
+        self.playGameKeyPressed(keyCode, modifier)
+        self.player.row, self.player.col = -10,-10
     def levelCreationMousePressed(self, x, y):
+        pos = (x,y)
         self.playGameMousePressed(x, y)
+        if(self.menuRect.collidepoint(pos)):
+            self.mode = "splashScreen"
 
     def levelCreationMouseDrag(self, x, y):
+        pos = (x, y)
         self.playGameMouseDrag(x, y)
 
+        if self.controlBar.tileRectList != None:
+            if self.controlBar.tileRectList[7].collidepoint(pos) or self.dragFlag[7]:
+                tile = Cube()
+                self.dragFlag[7] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
+
+            elif self.controlBar.tileRectList[8].collidepoint(pos) or self.dragFlag[8]:
+                tile = TargetTile()
+                self.dragFlag[8] = True
+                pos = (pos[0] - 70/2, pos[1]-44/2)
+                self.objectDragged = (tile, pos)
+
+            elif self.controlBar.tileRectList[9].collidepoint(pos) or self.dragFlag[9]:
+                player = Player()
+                self.dragFlag[9] = True
+                pos = (pos[0] - 70/2, pos[1] - 44/2)
+                self.objectDragged = (player, pos)
     def levelCreationMouseReleased(self, x, y, screen):
         self.playGameMouseReleased(x, y, screen)
 
     def levelCreationTimerFired(self, dt):
-        self.playGameTimerFired(dt)
+        if self.player.beginMoving:
+            if(not self.player.illegalMove):
+                self.playerGroup.update(self.board)
+                if(self.player.win):
+                    self.scene = CustomScene(True)
+            else:
+                self.scene = CustomScene(False)
+
+
     def levelCreationRedrawAll(self, screen):
         font2 = pygame.font.Font("freesansbold.ttf", 50)
 
@@ -386,6 +421,7 @@ class Game(PygameGame):
         self.levelCreationRect = levelCreationSurf.get_rect()
         self.levelCreationRect.center = (self.width//2, 40)
         screen.blit(levelCreationSurf, self.levelCreationRect)
+
         # draw the board
         self.boardObject.draw(screen, self.board)
         # control
@@ -397,6 +433,9 @@ class Game(PygameGame):
         for dragFlag in self.dragFlag:
             if dragFlag:
                 screen.blit(self.objectDragged[0].image, self.objectDragged[1])
+
+        # player
+        self.player.draw(screen, self.board, self.boardObject.cols, self.boardObject.halfTileWidth, self.boardObject.halfTileHeight)
 
         #Scene
         if(self.scene != None):
