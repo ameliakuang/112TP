@@ -50,30 +50,38 @@ class Save(Control):
 
 # Citation: https://stackoverflow.com/questions/46390231/how-to-create-a-text-input-box-with-pygame
 class TextBox(Control):
-    def __init__(self):
+    def __init__(self, font, isID):
         pygame.sprite.Sprite.__init__(self)
-        self.textBox = pygame.Surface((200, 50))
+        self.textBox = pygame.Surface((200, 25))
         self.textBox.fill((255, 255, 255))
         self.rect = self.textBox.get_rect()
-        self.text = "User ID:"
+        self.isID = isID
+        if self.isID:
+            self.text = "User ID: "
+        else:
+            self.text = "Board's Name: "
+        self.font = font
 
-        self.font = pygame.font.Font("freesansbold.ttf", 20)
+
         self.textSurf = self.font.render(self.text, True, (205,140,149))
         self.textRect = self.textSurf.get_rect()
 
     def update(self, keyCode, uni, modifier):
         if keyCode == pygame.K_RETURN:
             print(self.text)
-            self.text = "User ID:"
+            if self.isID:
+                self.text = "User ID: "
+            elif not self.isID:
+                self.text = "Board's Name: "
         elif keyCode == pygame.K_BACKSPACE:
             self.text = self.text[:-1]
         else:
             self.text += uni
 
-    def render(self, screen):
+    def render(self, screen, x, y):
         self.textSurf = self.font.render(self.text, True, (205,140,149))
-        screen.blit(self.textBox, (screen.get_rect().centerx-100, screen.get_rect().centery-50))
-        screen.blit(self.textSurf, (screen.get_rect().centerx-100, screen.get_rect().centery-50))
+        screen.blit(self.textBox, (x, y))
+        screen.blit(self.textSurf, (x, y))
 
 
 

@@ -58,7 +58,10 @@ class Game(PygameGame):
 
         #get the texts
         self.beginTexting = False
-        self.textBox = TextBox()
+        self.idBeginTexting = False
+        self.idTextBox = TextBox(self.fonts["instruction"], True)
+        self.boardBeginTexting = False
+        self.boardTextBox = TextBox(self.fonts["instruction"], False)
 
 
 
@@ -410,10 +413,14 @@ class Game(PygameGame):
             self.scene.state = None
             self.scene = None # clear the winning/losing scene
 
-        if self.beginTexting:
+        if self.idBeginTexting:
             if keyCode == pygame.K_RETURN:
-                self.beginTexting = False
-            self.textBox.update(keyCode, uni, modifier)
+                self.idBeginTexting = False
+            self.idTextBox.update(keyCode, uni, modifier)
+        if self.boardBeginTexting:
+            if keyCode == pygame.K_RETURN:
+                self.boardBeginTexting = False
+            self.boardTextBox.update(keyCode, uni, modifier)
 
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
@@ -422,6 +429,8 @@ class Game(PygameGame):
             self.mode = "splashScreen"
         elif(self.saveRect.collidepoint(pos)):
             self.beginTexting = True
+            self.idBeginTexting = True
+
 
 
     def levelCreationMouseDrag(self, x, y):
@@ -510,8 +519,11 @@ class Game(PygameGame):
                 textRect.centery = screen.get_rect().centery+60
                 screen.blit(textSurface, textRect)
 
-        if self.beginTexting:    
-            self.textBox.render(screen)
+        if self.beginTexting:
+            x, y = screen.get_rect().centerx-100, screen.get_rect().centery-25/2
+            self.idTextBox.render(screen, x, y)
+            y += 25
+            self.boardTextBox.render(screen, x, y)
 
 
 
