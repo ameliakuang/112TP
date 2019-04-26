@@ -5,7 +5,6 @@ from Board import *
 from Player import *
 from Tiles import *
 from Control import *
-from pygame_textinput import *
 import utility
 import copy
 import random
@@ -52,22 +51,29 @@ class Game(PygameGame):
         self.dragFlag = [False]*10
         self.objectDragged = None
 
-        # get the texts
+        self.fonts = dict()
+        self.fonts["splashScreenTitle"] = pygame.font.SysFont("copperplatettc", 150)
+        self.fonts["splashScreenBoxes"] = pygame.font.SysFont("copperplatettc", 50)
+        self.fonts["instruction"] = pygame.font.SysFont("avenirnextttc", 20)
+
+        #get the texts
         self.beginTexting = False
-        self.textinput = TextInput()
+        self.textBox = TextBox()
 
 
-    def keyPressed(self, keyCode, modifier):
+
+
+    def keyPressed(self, keyCode, uni, modifier):
         if (self.mode == "splashScreen"): 
-            self.splashScreenKeyPressed(keyCode, modifier)
+            self.splashScreenKeyPressed(keyCode, uni, modifier)
         elif (self.mode == "playGame"):   
-            self.playGameKeyPressed(keyCode, modifier)
+            self.playGameKeyPressed(keyCode, uni, modifier)
         elif (self.mode == "help"):       
-            self.helpKeyPressed(keyCode, modifier)
+            self.helpKeyPressed(keyCode, uni, modifier)
         elif (self.mode == "levelSelection"):
-            self.levelSelectionKeyPressed(keyCode, modifier)
+            self.levelSelectionKeyPressed(keyCode, uni, modifier)
         elif (self.mode == "levelCreation"):
-            self.levelCreationKeyPressed(keyCode, modifier)
+            self.levelCreationKeyPressed(keyCode, uni, modifier)
 
     def mousePressed(self, x, y):
         if (self.mode == "splashScreen"): 
@@ -122,7 +128,7 @@ class Game(PygameGame):
     ########################
     # playGame mode
     ########################
-    def playGameKeyPressed(self, keyCode, modifier):
+    def playGameKeyPressed(self, keyCode, uni, modifier):
         if self.scene != None and self.scene.state == False:
             self.player.__init__()
             self.scene.state = None
@@ -241,18 +247,26 @@ class Game(PygameGame):
         if(self.scene != None):
             self.scene.draw(screen)
             if(self.scene.state == True):
-                font = pygame.font.Font("freesansbold.ttf", 20)
+                font = self.fonts["instruction"]
                 textSurface = font.render("Select a new level by clicking on the menu button", True, (135, 71, 93))
                 textRect = textSurface.get_rect()
                 textRect.centerx = screen.get_rect().centerx
-                textRect.centery = screen.get_rect().centery+80
+                textRect.centery = screen.get_rect().centery+90
+                screen.blit(textSurface, textRect)
+            else:
+                font = self.fonts["instruction"]
+
+                textSurface = font.render("Press any key to try again", True, (139, 71, 93))
+                textRect = textSurface.get_rect()
+                textRect.centerx = screen.get_rect().centerx
+                textRect.centery = screen.get_rect().centery+60
                 screen.blit(textSurface, textRect)
 
 
     ########################
     # splashScreen mode
     ########################
-    def splashScreenKeyPressed(self, keyCode, modifier):
+    def splashScreenKeyPressed(self, keyCode, uni, modifier):
         pass
     def splashScreenMousePressed(self, x, y):
         pos = (x, y)
@@ -271,14 +285,14 @@ class Game(PygameGame):
 
     def splashScreenRedrawAll(self, screen):
         # Draw the title and the level selection
-        font1 = pygame.font.Font("freesansbold.ttf", 120)
+        font1 = self.fonts["splashScreenTitle"]
 
         titleSurface = font1.render("Pendo", True, (255, 255, 255))
         titleRect = titleSurface.get_rect()
         titleRect.center = (self.width//2, self.height//2-100)
         screen.blit(titleSurface, titleRect)
 
-        font2 = pygame.font.Font("freesansbold.ttf", 50)
+        font2 = self.fonts["splashScreenBoxes"]
 
         self.levelSurface = font2.render("Level Selection", True, (255, 255, 255), (205,140,149))
         self.levelRect = self.levelSurface.get_rect()
@@ -290,7 +304,7 @@ class Game(PygameGame):
         self.levelCreationRect.center = (self.width//2, self.height//2+130)
         screen.blit(self.levelCreationSurface, self.levelCreationRect)
 
-        self.helpSurface = font2.render("Help", True, (255, 255, 255), (205,140,149))
+        self.helpSurface = font2.render("Instruction", True, (255, 255, 255), (205,140,149))
         self.helpRect = self.helpSurface.get_rect()
         self.helpRect.center = (self.width//2, self.height//2+230)
         screen.blit(self.helpSurface, self.helpRect)        
@@ -298,14 +312,14 @@ class Game(PygameGame):
     ########################
     # help mode
     ########################
-    def helpKeyPressed(self, keyCode, modifier):
+    def helpKeyPressed(self, keyCode, uni, modifier):
         self.mode = "levelSelection"
     def helpMousePressed(self, x, y):
         self.mode = "splashScreen"
     def helpTimerFired(self, dt):
         pass
     def helpRedrawAll(self, screen):
-        font3 = pygame.font.Font("freesansbold.ttf", 20)
+        font3 = self.fonts["instruction"]
 
         textSurface0 = font3.render("Instruction:))))", True, (255, 255, 255))
         screen.blit(textSurface0, ((self.width/2-300, self.height/2-220)))
@@ -339,7 +353,7 @@ class Game(PygameGame):
     ########################
     # levelSelection mode
     ########################
-    def levelSelectionKeyPressed(self, keyCode, modifier):
+    def levelSelectionKeyPressed(self, keyCode, uni, modifier):
         pass
     def levelSelectionMousePressed(self, x, y):
         pos = (x, y)
@@ -360,7 +374,7 @@ class Game(PygameGame):
     def levelSelectionTimerFired(self, dt):
         pass
     def levelSelectionRedrawAll(self, screen):
-        font2 = pygame.font.Font("freesansbold.ttf", 50)
+        font2 = self.fonts["splashScreenBoxes"]
 
         levelSelectionSurface = font2.render("Level Selection", True, (255, 255, 255), (205,140,149))
         self.levelSelectionRect = levelSelectionSurface.get_rect()
@@ -389,14 +403,18 @@ class Game(PygameGame):
     ########################
     # levelCreation mode
     ########################
-    def levelCreationKeyPressed(self, keyCode, modifier):
+    def levelCreationKeyPressed(self, keyCode, uni, modifier):
         if self.scene != None and self.scene.state == False:
             self.player.__init__()
             self.player.row, self.player.col = -10, -10
             self.scene.state = None
             self.scene = None # clear the winning/losing scene
-        if self.beginTexting == True:
-            self.textinput.update(keyCode)
+
+        if self.beginTexting:
+            if keyCode == pygame.K_RETURN:
+                self.beginTexting = False
+            self.textBox.update(keyCode, uni, modifier)
+
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
         self.playGameMousePressed(x, y)
@@ -404,6 +422,7 @@ class Game(PygameGame):
             self.mode = "splashScreen"
         elif(self.saveRect.collidepoint(pos)):
             self.beginTexting = True
+
 
     def levelCreationMouseDrag(self, x, y):
         pos = (x, y)
@@ -448,7 +467,7 @@ class Game(PygameGame):
             self.resetState = False
 
     def levelCreationRedrawAll(self, screen):
-        font2 = pygame.font.Font("freesansbold.ttf", 50)
+        font2 = self.fonts["splashScreenBoxes"]
 
         levelCreationSurf = font2.render("Level Creation", True, (255, 255, 255), (205,140,149))
         self.levelCreationRect = levelCreationSurf.get_rect()
@@ -475,17 +494,26 @@ class Game(PygameGame):
         if(self.scene != None):
             self.scene.draw(screen)
             if(self.scene.state == True):
-                font = pygame.font.Font("freesansbold.ttf", 20)
+                font = self.fonts["instruction"]
 
                 textSurface = font.render("Remember to save your work or go back to the menu:)", True, (135, 71, 93))
                 textRect = textSurface.get_rect()
                 textRect.centerx = screen.get_rect().centerx
-                textRect.centery = screen.get_rect().centery+70
+                textRect.centery = screen.get_rect().centery+80
+                screen.blit(textSurface, textRect)
+            else:
+                font = self.fonts["instruction"]
+
+                textSurface = font.render("Press any key to try again", True, (139, 71, 93))
+                textRect = textSurface.get_rect()
+                textRect.centerx = screen.get_rect().centerx
+                textRect.centery = screen.get_rect().centery+60
                 screen.blit(textSurface, textRect)
 
-        # text
-        if self.beginTexting:
-            screen.blit(self.textinput.get_surface(), (10, 10))
+        if self.beginTexting:    
+            self.textBox.render(screen)
+
+
 
 
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
@@ -512,13 +540,7 @@ class CustomScene(object):
             rect.centerx = screen.get_rect().centerx
             rect.centery = screen.get_rect().centery-100
 
-            font = pygame.font.Font("freesansbold.ttf", 20)
 
-            textSurface = font.render("Press any key to try again", True, (139, 71, 93))
-            textRect = textSurface.get_rect()
-            textRect.centerx = screen.get_rect().centerx
-            textRect.centery = screen.get_rect().centery+50
-            screen.blit(textSurface, textRect)
         screen.blit(image, rect)
     
 

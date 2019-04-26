@@ -48,6 +48,34 @@ class Save(Control):
         #print(self.rect.x, self.rect.y)
         self.rect.x, self.rect.y = 80, -13
 
+# Citation: https://stackoverflow.com/questions/46390231/how-to-create-a-text-input-box-with-pygame
+class TextBox(Control):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.textBox = pygame.Surface((200, 50))
+        self.textBox.fill((255, 255, 255))
+        self.rect = self.textBox.get_rect()
+        self.text = "User ID:"
+
+        self.font = pygame.font.Font("freesansbold.ttf", 20)
+        self.textSurf = self.font.render(self.text, True, (205,140,149))
+        self.textRect = self.textSurf.get_rect()
+
+    def update(self, keyCode, uni, modifier):
+        if keyCode == pygame.K_RETURN:
+            print(self.text)
+            self.text = "User ID:"
+        elif keyCode == pygame.K_BACKSPACE:
+            self.text = self.text[:-1]
+        else:
+            self.text += uni
+
+    def render(self, screen):
+        self.textSurf = self.font.render(self.text, True, (205,140,149))
+        screen.blit(self.textBox, (screen.get_rect().centerx-100, screen.get_rect().centery-50))
+        screen.blit(self.textSurf, (screen.get_rect().centerx-100, screen.get_rect().centery-50))
+
+
 
 class controlBar(Control):
     def __init__(self, screenWidth, screenHeight):

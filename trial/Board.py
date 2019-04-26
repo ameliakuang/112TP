@@ -74,8 +74,9 @@ class Board(object):
             return board
         elif level == 3:
             col = random.choice([n-2, n-3, n-1])
+
             if(col == n-3) or (col == n-2):
-                row_on_that_col = random.randint(2, n-3)
+                row_on_that_col = random.randint(3, n-3)
 
                 board[row_on_that_col][col] = 8
                 board[row_on_that_col][col-1] = 9
@@ -87,8 +88,8 @@ class Board(object):
 
             else:
                 board[0][col] = 8
-                row_for_cube = random.randint(2, n-3)
-                col_for_cube = random.randint(2, n-3)
+                row_for_cube = random.randint(3, n-3)
+                col_for_cube = random.randint(3, n-3)
                 board[row_for_cube][col_for_cube] = 7
                 board[row_for_cube][col_for_cube-1] = 9
                 board[row_for_cube][col] = 9

@@ -31,7 +31,7 @@ class PygameGame(object):
     def mouseDrag(self, x, y):
         pass
 
-    def keyPressed(self, keyCode, modifier):
+    def keyPressed(self, keyCode, uni, modifier):
         pass
 
     def keyReleased(self, keyCode, modifier, screen):
@@ -96,7 +96,7 @@ class PygameGame(object):
                 ## Press Key
                 elif event.type == pygame.KEYDOWN:
                     self._keys[event.key] = True
-                    self.keyPressed(event.key, event.mod)
+                    self.keyPressed(event.key, event.unicode, event.mod)
                 ## Release Key
                 elif event.type == pygame.KEYUP:
                     self._keys[event.key] = False
