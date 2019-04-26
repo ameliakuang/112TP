@@ -7,6 +7,8 @@ import utility
 5: portal tiles
 6: jump tiles
 7: cube 
+8: target
+9: empty
 '''
 
 class Tile(pygame.sprite.Sprite):
@@ -53,5 +55,13 @@ class TargetTile(Tile):
         self.image = pygame.image.load('images/tiles/target.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.type = 8
+
+class EmptyTile(Tile):
+    def __init__(self):
+        super(EmptyTile, self).__init__()
+        self.image = pygame.image.load('images/tiles/empty.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.type = 10
+
 
 

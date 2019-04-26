@@ -1,4 +1,5 @@
 import pygame
+from Player import *
 from Tiles import *
 
 class Control(pygame.sprite.Sprite):
@@ -48,16 +49,37 @@ class controlBar(Control):
             self.tileOptions.add(direTile)
         portalTile = PortalTile()
         jumpTile = JumpTile()
+        cube = Cube()
+        player = Player()
+        targetTile = TargetTile()
         self.tileOptions.add(portalTile)
         self.tileOptions.add(jumpTile)
+        self.tileOptions.add(cube)
+        self.tileOptions.add(targetTile)
+        self.tileOptions.add(player)
 
         self.tileRectList = []
 
     def draw(self, screen, screenWidth, screenHeight):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         for tile in self.tileOptions:
-            x, y = 10+80*tile.type, screenHeight-70
-            self.tileRectList.append(screen.blit(tile.image, (x, y)))
+            # for target tile
+            if isinstance(tile, TargetTile):
+                x, y = 10 + 80*8, screenHeight - 70
+                self.tileRectList.append(screen.blit(tile.image, (x, y)))
+            # for cube
+            elif isinstance(tile, Cube):
+                x, y = 10 + 80*tile.type, screenHeight-80
+                self.tileRectList.append(screen.blit(tile.image, (x, y)))
+            # for the other tiles
+            elif not isinstance(tile, Player):
+                x, y = 10+80*tile.type, screenHeight-70
+                self.tileRectList.append(screen.blit(tile.image, (x, y)))
+            # for the player
+            else:
+                x, y = 10+80*9, screenHeight-70
+                tile.image.set_colorkey((255,255,255))
+                self.tileRectList.append(screen.blit(tile.image, (x, y)))
             
 
 

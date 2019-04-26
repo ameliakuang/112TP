@@ -27,8 +27,8 @@ class Game(PygameGame):
             n = random.choice([6,8,10])
         else:
             n = 5
-        self.boardObject = Board(n, self.player, self.level)
-        #print("board level", self.level)
+        self.boardObject = Board(n, self.level)
+
         self.board = copy.deepcopy(self.boardObject.board)
         #print(self.board)
         
@@ -76,10 +76,15 @@ class Game(PygameGame):
     def mouseDrag(self, x, y):
         if self.mode == "playGame":
             self.playGameMouseDrag(x, y)
+        elif self.mode == "levelCreation":
+            self.levelCreationMouseDrag(x, y)
+
 
     def mouseReleased(self, x, y, screen):
         if self.mode == "playGame":
             self.playGameMouseReleased(x, y, screen)
+        elif self.mode == "levelCreation":
+            self.levelCreationMouseReleased(x, y, screen)
 
     def timerFired(self, dt):
         if (self.mode == "splashScreen"): 
@@ -115,7 +120,6 @@ class Game(PygameGame):
             self.scene.state = None
             self.scene = None # clear the winning/losing scene
             
-
 
     def playGameMousePressed(self, x, y):
         pos = (x, y)
@@ -209,9 +213,11 @@ class Game(PygameGame):
     def playGameRedrawAll(self, screen):
         # Draw the board
         self.boardObject.draw(screen, self.board)
+        self.player.draw(screen, self.board, self.boardObject.cols, self.boardObject.halfTileWidth, self.boardObject.halfTileHeight)
 
         # Draw the control
         self.controlBar.draw(screen, self.width, self.height)
+        pygame.draw.rect(screen, (255, 255, 255), (10+80*7, self.height-90, 300, 200))
         self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
@@ -235,6 +241,7 @@ class Game(PygameGame):
         if(self.levelRect.collidepoint(pos)):
             self.mode = "levelSelection"
         elif(self.levelCreationRect.collidepoint(pos)):
+            self.init(4)
             self.mode = "levelCreation"
         elif(self.helpRect.collidepoint(pos)):
             self.mode = "help"
@@ -362,9 +369,16 @@ class Game(PygameGame):
     def levelCreationKeyPressed(self, keyCode, modifier):
         pass
     def levelCreationMousePressed(self, x, y):
-        self.mode = "splashScreen"
+        self.playGameMousePressed(x, y)
+
+    def levelCreationMouseDrag(self, x, y):
+        self.playGameMouseDrag(x, y)
+
+    def levelCreationMouseReleased(self, x, y, screen):
+        self.playGameMouseReleased(x, y, screen)
+
     def levelCreationTimerFired(self, dt):
-        pass
+        self.playGameTimerFired(dt)
     def levelCreationRedrawAll(self, screen):
         font2 = pygame.font.Font("freesansbold.ttf", 50)
 
@@ -372,6 +386,23 @@ class Game(PygameGame):
         self.levelCreationRect = levelCreationSurf.get_rect()
         self.levelCreationRect.center = (self.width//2, 40)
         screen.blit(levelCreationSurf, self.levelCreationRect)
+        # draw the board
+        self.boardObject.draw(screen, self.board)
+        # control
+        self.controlBar.draw(screen, self.width, self.height)
+        self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
+        self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
+        self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
+
+        for dragFlag in self.dragFlag:
+            if dragFlag:
+                screen.blit(self.objectDragged[0].image, self.objectDragged[1])
+
+        #Scene
+        if(self.scene != None):
+            self.scene.draw(screen)
+
+
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
 # I changed the specific image loaded and add the interaction with the player
 class CustomScene(object):

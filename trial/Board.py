@@ -1,15 +1,13 @@
 import pygame
-from Player import Player
 from Tiles import *
 import utility
 import random
 
 
 class Board(object):
-    def __init__(self, n, player, level):
+    def __init__(self, n, level):
         self.rows = self.cols = n
         self.board = self.generateBoard(n, level)
-        self.player = player
         self.level = level
 
         self.tileWidth = 70
@@ -30,6 +28,7 @@ class Board(object):
     7: cube 
     8：target tiles
     9: empty spot
+    10: level creation tile
     '''
     def generateBoard(self, n, level):
         board = [[0] * n for row in range(n)]
@@ -101,6 +100,12 @@ class Board(object):
                     board[row][col-2] = 9
             
             return board
+        # level creation
+        elif level == 4:
+            for row in range(n):
+                for col in range(n):
+                    board[row][col] = 10
+            return board
 
 
 
@@ -157,10 +162,14 @@ class Board(object):
                     iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
                     screen.blit(tileImage, (iso_x, iso_y))
                 # empty spots
-                else:
+                elif (num == 9):
                     continue
-        # for the player
-        self.player.draw(screen, board, self.cols, self.halfTileWidth, self.halfTileHeight)
+                else:
+                    tile = EmptyTile()
+                    tileImage = tile.image
+                    iso_x, iso_y = utility.mapToIso(row, col, self.cols, self.halfTileWidth, self.halfTileHeight, screen)
+                    screen.blit(tileImage, (iso_x, iso_y))
+        
 
         
         
