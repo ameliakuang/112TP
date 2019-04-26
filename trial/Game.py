@@ -42,6 +42,9 @@ class Game(PygameGame):
         self.resetState = False
 
         self.menu = Menu(self.width, self.height)
+        self.exit = Exit(self.width, self.height)
+
+        self.save = Save(self.width, self.height)
 
         self.controlBar = controlBar(self.width, self.height)
 
@@ -232,6 +235,13 @@ class Game(PygameGame):
         #Scene
         if(self.scene != None):
             self.scene.draw(screen)
+            if(self.scene.state == True):
+                font = pygame.font.Font("freesansbold.ttf", 20)
+                textSurface = font.render("Select a new level by clicking on the menu button", True, (135, 71, 93))
+                textRect = textSurface.get_rect()
+                textRect.centerx = screen.get_rect().centerx
+                textRect.centery = screen.get_rect().centery+80
+                screen.blit(textSurface, textRect)
 
 
     ########################
@@ -340,6 +350,8 @@ class Game(PygameGame):
             self.init(3)
             self.level = 3
             self.mode = "playGame"
+        elif(self.exitRect.collidepoint(pos)):
+            self.mode = "splashScreen"
     def levelSelectionTimerFired(self, dt):
         pass
     def levelSelectionRedrawAll(self, screen):
@@ -365,19 +377,26 @@ class Game(PygameGame):
         self.textRect3.center = (self.width//2, self.height - 150)
         screen.blit(level3Text, self.textRect3)
 
+        self.exitRect = screen.blit(self.exit.image, (self.exit.rect.x, self.exit.rect.y))
+
 
 
     ########################
     # levelCreation mode
     ########################
     def levelCreationKeyPressed(self, keyCode, modifier):
-        self.playGameKeyPressed(keyCode, modifier)
-        self.player.row, self.player.col = -10,-10
+        if self.scene != None and self.scene.state == False:
+            self.player.__init__()
+            self.player.row, self.player.col = -10, -10
+            self.scene.state = None
+            self.scene = None # clear the winning/losing scene
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
         self.playGameMousePressed(x, y)
         if(self.menuRect.collidepoint(pos)):
             self.mode = "splashScreen"
+        elif(self.saveRect.collidepoint(pos)):
+            pass
 
     def levelCreationMouseDrag(self, x, y):
         pos = (x, y)
@@ -412,7 +431,13 @@ class Game(PygameGame):
                     self.scene = CustomScene(True)
             else:
                 self.scene = CustomScene(False)
-
+                self.player.row, self.player.col = -10,-10
+        if self.resetState:
+            self.board = copy.deepcopy(self.boardObject.board)
+            self.player.__init__()
+            self.player.row, self.player.col = -10, -10
+            self.scene = None # clear the winning/losing scene
+            self.resetState = False
 
     def levelCreationRedrawAll(self, screen):
         font2 = pygame.font.Font("freesansbold.ttf", 50)
@@ -429,6 +454,7 @@ class Game(PygameGame):
         self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
+        self.saveRect = screen.blit(self.save.image, (self.save.rect.x, self.save.rect.y))
 
         for dragFlag in self.dragFlag:
             if dragFlag:
@@ -440,6 +466,14 @@ class Game(PygameGame):
         #Scene
         if(self.scene != None):
             self.scene.draw(screen)
+            if(self.scene.state == True):
+                font = pygame.font.Font("freesansbold.ttf", 20)
+
+                textSurface = font.render("Remember to save your work or go back to the menu:)", True, (135, 71, 93))
+                textRect = textSurface.get_rect()
+                textRect.centerx = screen.get_rect().centerx
+                textRect.centery = screen.get_rect().centery+70
+                screen.blit(textSurface, textRect)
 
 
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
@@ -456,13 +490,8 @@ class CustomScene(object):
             rect = image.get_rect()
             rect.centerx = screen.get_rect().centerx
             rect.centery = screen.get_rect().centery-50
-            font = pygame.font.Font("freesansbold.ttf", 20)
+            
 
-            textSurface = font.render("Select a new level by clicking the menu button", True, (255, 255, 0))
-            textRect = textSurface.get_rect()
-            textRect.centerx = screen.get_rect().centerx
-            textRect.centery = screen.get_rect().centery+80
-            screen.blit(textSurface, textRect)
         # Lose
         else:
             image = pygame.image.load('images/game-over.png').convert()
@@ -473,7 +502,7 @@ class CustomScene(object):
 
             font = pygame.font.Font("freesansbold.ttf", 20)
 
-            textSurface = font.render("Press any key to try again", True, (255, 255, 0))
+            textSurface = font.render("Press any key to try again", True, (139, 71, 93))
             textRect = textSurface.get_rect()
             textRect.centerx = screen.get_rect().centerx
             textRect.centery = screen.get_rect().centery+50

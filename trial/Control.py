@@ -32,6 +32,22 @@ class Menu(Control):
         #print(self.rect.x, self.rect.y)
         self.rect.x, self.rect.y = -7, -10
 
+class Exit(Control):
+    def __init__(self, screenWidth, screenHeight):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('images/icons/exitLeft.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        #print(self.rect.x, self.rect.y)
+        self.rect.x, self.rect.y = -7, -10
+
+class Save(Control):
+    def __init__(self, screenWidth, screenHeight):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('images/icons/save.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        #print(self.rect.x, self.rect.y)
+        self.rect.x, self.rect.y = 80, -13
+
 
 class controlBar(Control):
     def __init__(self, screenWidth, screenHeight):

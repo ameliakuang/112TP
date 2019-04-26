@@ -1,9 +1,10 @@
 Citation:
 Image:
-cannon_ball.png:https://opengameart.org/content/cannonball
-wall.png & grass.png:https://python-forum.io/Thread-PyGame-Simple-code-for-isometric-2D-games
+The tiles: Thanks to my best friend Catherine Cheng!
+You Win.png, game-over png: https://images.app.goo.gl/GtMdfmrbJS8RbPLZA, https://images.app.goo.gl/ez9eVUJD2sbhGUuN8
+Game icons: https://opengameart.org/content/game-icons
+
 
 Code
-Framework:
+Framework: by Lukas Peraza
 The conversion from cartesian coordinates to isometric coordinates (Board.py): 
-	https://opengameart.org/content/cannonball
