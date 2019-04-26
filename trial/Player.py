@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
                 self.dcol = 0
             # check for direction tiles
             ## up
-            elif(num == 1):
+            if(num == 1):
                 self.currDire = "up"
                 self.drow, self.dcol = -1,0
             ## right

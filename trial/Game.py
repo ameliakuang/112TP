@@ -5,6 +5,7 @@ from Board import *
 from Player import *
 from Tiles import *
 from Control import *
+from pygame_textinput import *
 import utility
 import copy
 import random
@@ -50,6 +51,10 @@ class Game(PygameGame):
 
         self.dragFlag = [False]*10
         self.objectDragged = None
+
+        # get the texts
+        self.beginTexting = False
+        self.textinput = TextInput()
 
 
     def keyPressed(self, keyCode, modifier):
@@ -270,24 +275,24 @@ class Game(PygameGame):
 
         titleSurface = font1.render("Pendo", True, (255, 255, 255))
         titleRect = titleSurface.get_rect()
-        titleRect.center = (self.width//2, self.height//2-70)
+        titleRect.center = (self.width//2, self.height//2-100)
         screen.blit(titleSurface, titleRect)
 
         font2 = pygame.font.Font("freesansbold.ttf", 50)
 
         self.levelSurface = font2.render("Level Selection", True, (255, 255, 255), (205,140,149))
         self.levelRect = self.levelSurface.get_rect()
-        self.levelRect.center = (self.width//2, self.height//2+50)
+        self.levelRect.center = (self.width//2, self.height//2+30)
         screen.blit(self.levelSurface, self.levelRect)
 
         self.levelCreationSurface = font2.render("Level Creation", True, (255, 255, 255), (205,140,149))
         self.levelCreationRect = self.levelCreationSurface.get_rect()
-        self.levelCreationRect.center = (self.width//2, self.height//2+150)
+        self.levelCreationRect.center = (self.width//2, self.height//2+130)
         screen.blit(self.levelCreationSurface, self.levelCreationRect)
 
         self.helpSurface = font2.render("Help", True, (255, 255, 255), (205,140,149))
         self.helpRect = self.helpSurface.get_rect()
-        self.helpRect.center = (self.width//2, self.height//2+250)
+        self.helpRect.center = (self.width//2, self.height//2+230)
         screen.blit(self.helpSurface, self.helpRect)        
 
     ########################
@@ -390,13 +395,15 @@ class Game(PygameGame):
             self.player.row, self.player.col = -10, -10
             self.scene.state = None
             self.scene = None # clear the winning/losing scene
+        if self.beginTexting == True:
+            self.textinput.update(keyCode)
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
         self.playGameMousePressed(x, y)
         if(self.menuRect.collidepoint(pos)):
             self.mode = "splashScreen"
         elif(self.saveRect.collidepoint(pos)):
-            pass
+            self.beginTexting = True
 
     def levelCreationMouseDrag(self, x, y):
         pos = (x, y)
@@ -420,6 +427,7 @@ class Game(PygameGame):
                 self.dragFlag[9] = True
                 pos = (pos[0] - 70/2, pos[1] - 44/2)
                 self.objectDragged = (player, pos)
+
     def levelCreationMouseReleased(self, x, y, screen):
         self.playGameMouseReleased(x, y, screen)
 
@@ -474,6 +482,10 @@ class Game(PygameGame):
                 textRect.centerx = screen.get_rect().centerx
                 textRect.centery = screen.get_rect().centery+70
                 screen.blit(textSurface, textRect)
+
+        # text
+        if self.beginTexting:
+            screen.blit(self.textinput.get_surface(), (10, 10))
 
 
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
