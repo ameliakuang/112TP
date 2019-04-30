@@ -608,6 +608,19 @@ class Game(PygameGame):
             textRect.centerx, textRect.centery = self.width//2, 100
             screen.blit(textSurface, textRect)
 
+            textSurface = font2.render("~Press the up/down arrow key to choose a board~", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery-100
+            screen.blit(textSurface, textRect)
+
+            textSurface = font2.render("~Click on return to leave~", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery-60
+            screen.blit(textSurface, textRect)
+
+
             returnSurface = font2.render("Return", True, (255,255,255), (205, 140, 149))
             return_rect = returnSurface.get_rect()
             return_rect.center = (screen.get_rect().centerx, screen.get_rect().centery+80)
