@@ -430,7 +430,14 @@ class Game(PygameGame):
                 self.boardTextBox.update(keyCode, uni, modifier)
 
     def storeInfo(self, info):
-        print(self.board, "self.transmittedInfo: ", info)
+        #print(self.board, "self.transmittedInfo: ", info)
+        data = dict()
+        data["board"] = self.board
+        indexB = info.index("Board's")
+        indexI = info.index("ID")
+        data["User"] = info[9:indexB-1]
+        data["boardName"] = info[indexB+14:]
+        #print(data)
 
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
