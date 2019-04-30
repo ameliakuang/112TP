@@ -30,7 +30,6 @@ class Game(PygameGame):
         self.boardObject = Board(n, self.level)
 
         self.board = copy.deepcopy(self.boardObject.board)
-        #print(self.board)
         
         self.scene = None
 
@@ -54,7 +53,7 @@ class Game(PygameGame):
         self.fonts = dict()
         self.fonts["splashScreenTitle"] = pygame.font.SysFont("copperplatettc", 150)
         self.fonts["splashScreenBoxes"] = pygame.font.SysFont("copperplatettc", 50)
-        self.fonts["instruction"] = pygame.font.SysFont("avenirnextttc", 20)
+        self.fonts["instruction"] = pygame.font.SysFont("avenirnextttc", 27)
 
         #get the texts
         self.beginTexting = False
@@ -62,6 +61,7 @@ class Game(PygameGame):
         self.idTextBox = TextBox(self.fonts["instruction"], True)
         self.boardBeginTexting = False
         self.boardTextBox = TextBox(self.fonts["instruction"], False)
+        self.transmittedInfo = ""
 
 
 
@@ -417,10 +417,20 @@ class Game(PygameGame):
             if keyCode == pygame.K_RETURN:
                 self.idBeginTexting = False
             self.idTextBox.update(keyCode, uni, modifier)
+
         if self.boardBeginTexting:
             if keyCode == pygame.K_RETURN:
                 self.boardBeginTexting = False
-            self.boardTextBox.update(keyCode, uni, modifier)
+                self.transmittedInfo += self.boardTextBox.text
+                self.storeInfo(self.transmittedInfo)
+                #print("self.transmittedInfo: ", self.transmittedInfo)
+                self.idTextBox = None
+                self.boardTextBox = None
+            if self.boardTextBox != None:
+                self.boardTextBox.update(keyCode, uni, modifier)
+
+    def storeInfo(self, info):
+        print(self.board, "self.transmittedInfo: ", info)
 
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
@@ -430,6 +440,13 @@ class Game(PygameGame):
         elif(self.saveRect.collidepoint(pos)):
             self.beginTexting = True
             self.idBeginTexting = True
+            self.idTextBox = TextBox(self.fonts["instruction"], True)
+            self.boardTextBox = TextBox(self.fonts["instruction"], False)
+            self.transmittedInfo = ""
+        elif self.boardTextBox != None and (self.boardTextBox.textRect.collidepoint(pos)):
+            self.transmittedInfo += self.idTextBox.text + " "
+            self.idBeginTexting = False
+            self.boardBeginTexting = True
 
 
 
@@ -519,11 +536,39 @@ class Game(PygameGame):
                 textRect.centery = screen.get_rect().centery+60
                 screen.blit(textSurface, textRect)
 
-        if self.beginTexting:
-            x, y = screen.get_rect().centerx-100, screen.get_rect().centery-25/2
-            self.idTextBox.render(screen, x, y)
-            y += 25
-            self.boardTextBox.render(screen, x, y)
+        if self.beginTexting and self.boardTextBox != None:
+            font = self.fonts["instruction"]
+            textSurface = font.render("~Please enter your User ID and the name of the board:)~", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery-105
+            screen.blit(textSurface, textRect)
+
+            textSurface = font.render("~Click on the corresponding text boxes and type~", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery - 70
+            screen.blit(textSurface, textRect)
+
+            textSurface = font.render("~Hit return to save the information when you are done~", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery-35
+            screen.blit(textSurface, textRect)
+
+
+            self.idTextBox.textRect.x = screen.get_rect().centerx-100
+            self.idTextBox.textRect.y = screen.get_rect().centery
+            self.idTextBox.render(screen, self.idTextBox.textRect.x, self.idTextBox.textRect.y)
+            if self.idBeginTexting:
+                self.idTextBox.render(screen, self.idTextBox.textRect.x, self.idTextBox.textRect.y)
+
+            self.boardTextBox.textRect.x = screen.get_rect().centerx-100
+            self.boardTextBox.textRect.y = self.idTextBox.textRect.y + 35
+            self.boardTextBox.render(screen, self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)
+            if self.boardBeginTexting:
+                self.boardTextBox.render(screen,self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)
+
 
 
 

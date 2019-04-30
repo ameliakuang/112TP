@@ -52,9 +52,6 @@ class Save(Control):
 class TextBox(Control):
     def __init__(self, font, isID):
         pygame.sprite.Sprite.__init__(self)
-        self.textBox = pygame.Surface((200, 25))
-        self.textBox.fill((255, 255, 255))
-        self.rect = self.textBox.get_rect()
         self.isID = isID
         if self.isID:
             self.text = "User ID: "
@@ -62,13 +59,11 @@ class TextBox(Control):
             self.text = "Board's Name: "
         self.font = font
 
-
-        self.textSurf = self.font.render(self.text, True, (205,140,149))
+        self.textSurf = self.font.render(self.text, True, (205,140,149), (255,255,255))
         self.textRect = self.textSurf.get_rect()
 
     def update(self, keyCode, uni, modifier):
         if keyCode == pygame.K_RETURN:
-            print(self.text)
             if self.isID:
                 self.text = "User ID: "
             elif not self.isID:
@@ -79,9 +74,10 @@ class TextBox(Control):
             self.text += uni
 
     def render(self, screen, x, y):
-        self.textSurf = self.font.render(self.text, True, (205,140,149))
-        screen.blit(self.textBox, (x, y))
-        screen.blit(self.textSurf, (x, y))
+        #screen.blit(self.textRect, (x, y))
+        if self != None:
+            self.textSurf = self.font.render(self.text, True, (205,140,149), (255,255,255))
+            screen.blit(self.textSurf, (x, y))
 
 
 
