@@ -73,32 +73,65 @@ class Board(object):
                 board[row][tempCol] = 9
             return board
         elif level == 3:
-            col = random.choice([n-2, n-3, n-1])
+            num_cube = random.randint(1, 2)
+            if num_cube == 1:
+                col = random.choice([n-2, n-3, n-1])
 
-            if(col == n-3) or (col == n-2):
-                row_on_that_col = random.randint(3, n-3)
+                if(col == n-3) or (col == n-2):
+                    row_on_that_col = random.randint(3, n-3)
 
-                board[row_on_that_col][col] = 8
-                board[row_on_that_col][col-1] = 9
-                board[row_on_that_col][col-4] = 9
-                board[row_on_that_col][col-3] = 7
-                for row in range(1, n):
-                    board[row][col-1] = 9
-                board[row_on_that_col][0] = 9
+                    board[row_on_that_col][col] = 8
+                    board[row_on_that_col][col-1] = 9
+                    board[row_on_that_col][col-4] = 9
+                    board[row_on_that_col][col-3] = 7
+                    for row in range(1, n):
+                        board[row][col-1] = 9
+                    board[row_on_that_col][0] = 9
 
-            else:
-                board[0][col] = 8
-                row_for_cube = random.randint(3, n-3)
-                col_for_cube = random.randint(3, n-3)
-                board[row_for_cube][col_for_cube] = 7
-                board[row_for_cube][col_for_cube-1] = 9
-                board[row_for_cube][col] = 9
-                board[row_for_cube][0] = 9
-                if(n != 6):
-                    for row in range(row_for_cube+1, n):
-                        board[row][col_for_cube] = 9
-                for row in range(0, n-3):
-                    board[row][col-2] = 9
+                else:
+                    board[0][col] = 8
+                    row_for_cube = random.randint(3, n-3)
+                    col_for_cube = random.randint(3, n-3)
+                    board[row_for_cube][col_for_cube] = 7
+                    board[row_for_cube][col_for_cube-1] = 9
+                    board[row_for_cube][col] = 9
+                    board[row_for_cube][0] = 9
+                    if(n != 6):
+                        for row in range(row_for_cube+1, n):
+                            board[row][col_for_cube] = 9
+                    for row in range(0, n-3):
+                        board[row][col-2] = 9                
+            elif num_cube == 2:
+                col_for_first_cube = random.randint(2,3)
+                row_for_first_cube = random.randint(5, n-3)
+                board[row_for_first_cube][col_for_first_cube] = 7
+                board[row_for_first_cube+1][col_for_first_cube] = 9
+                temp = random.randint(n-2, n-1)
+                board[temp][col_for_first_cube] = 9
+                board[temp][0] = 9
+
+
+                col_for_second_cube = random.randint(5,6)
+                row_for_second_cube = random.randint(3, row_for_first_cube-1)
+                board[row_for_second_cube][col_for_second_cube] = 7
+                board[row_for_second_cube][col_for_first_cube] = 9
+                board[row_for_second_cube][col_for_second_cube-1] = 9
+
+                col_for_target = min(random.randint(col_for_second_cube+1, n-1), n-1)
+                board[row_for_second_cube][col_for_target] = 8
+
+                if(col_for_first_cube > 2):
+                    for row in range(0, row_for_first_cube):
+                        board[row][1] = 9
+                if(col_for_second_cube<n-2):
+                    for row in range(row_for_second_cube+1, n):
+                        board[row][n-1] = 9
+
+            return board
+                #board[row_for_second_cube][]
+
+
+
             
             return board
         # level creation

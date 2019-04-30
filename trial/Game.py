@@ -25,7 +25,7 @@ class Game(PygameGame):
         self.level = level
         n = 0
         if self.level == 3:
-            n = random.choice([6,8,10])
+            n = random.choice([8,10])
         else:
             n = 5
         self.boardObject = Board(n, self.level)
@@ -63,7 +63,7 @@ class Game(PygameGame):
         self.transmittedInfo = ""
         self.levelCreated = []
 
-        # Citation: https://www.cs.cmu.edu/~112/notes/notes-strings.html
+        # Citation for the file io: https://www.cs.cmu.edu/~112/notes/notes-strings.html
         if(os.path.exists("level.txt")) and os.path.getsize('level.txt') > 0:
             with open(self.levelCreationFile) as f:
                 self.levelCreated = json.load(f)
