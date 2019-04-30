@@ -678,12 +678,15 @@ class Game(PygameGame):
         textSurface3 = font3.render("~You can load a board by clicking on the import button~", True, (255,255,255))
         screen.blit(textSurface3, (self.width/2-370, self.height/2-20))  
 
+        textSurface5 = font3.render("~Release your mouse at the position you want to put the cube~", True, (255,255,255))
+        screen.blit(textSurface5, (self.width/2-370, self.height/2+30))
+
         textSurface4 = font3.render("~ALERT: You can only have one player and one target spot~", True, (255,255,255))
-        screen.blit(textSurface4, (self.width/2-370, self.height/2+30))           
+        screen.blit(textSurface4, (self.width/2-370, self.height/2+90))           
 
 
         textSurface5 = font3.render("~Press any key to get started~", True, (255,255,255))
-        screen.blit(textSurface5, (self.width/2-370, self.height/2+80))   
+        screen.blit(textSurface5, (self.width/2-370, self.height/2+140))   
 
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
 # I changed the specific image loaded and add the interaction with the player
