@@ -84,6 +84,8 @@ class Game(PygameGame):
             self.levelSelectionKeyPressed(keyCode, uni, modifier)
         elif (self.mode == "levelCreation"):
             self.levelCreationKeyPressed(keyCode, uni, modifier)
+        elif (self.mode == "levelCreationHelp"):
+            self.levelCreationHelpKeyPressed(keyCode, uni, modifier)
 
     def mousePressed(self, x, y):
         if (self.mode == "splashScreen"): 
@@ -96,6 +98,8 @@ class Game(PygameGame):
             self.levelSelectionMousePressed(x,y)
         elif (self.mode == "levelCreation"):
             self.levelCreationMousePressed(x,y)
+        elif (self.mode == "levelCreationHelp"):
+            self.levelCreationHelpMousePressed(x, y)
 
     def mouseDrag(self, x, y):
         if self.mode == "playGame":
@@ -121,6 +125,8 @@ class Game(PygameGame):
             self.levelSelectionTimerFired(dt)
         elif (self.mode == "levelCreation"):
             self.levelCreationTimerFired(dt)
+        elif (self.mode == "levelCreationHelp"):
+            self.levelCreationHelpTimerFired(dt)
 
 
     def redrawAll(self, screen):
@@ -134,6 +140,8 @@ class Game(PygameGame):
             self.levelSelectionRedrawAll(screen)
         elif (self.mode == "levelCreation"):
             self.levelCreationRedrawAll(screen)
+        elif (self.mode == "levelCreationHelp"):
+            self.levelCreationHelpRedrawAll(screen)
 
     ########################
     # playGame mode
@@ -200,6 +208,13 @@ class Game(PygameGame):
                 pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
                 self.objectDragged = (tile, pos)
 
+            elif self.controlBar.tileRectList[7].collidepoint(pos) or self.dragFlag[7]:
+                tile = Cube()
+                self.dragFlag[7] = True
+                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
+                self.objectDragged = (tile, pos)
+
+
 
     def playGameMouseReleased(self, x, y, screen):
         index = 0
@@ -244,7 +259,7 @@ class Game(PygameGame):
 
         # Draw the control
         self.controlBar.draw(screen, self.width, self.height)
-        pygame.draw.rect(screen, (255, 255, 255), (10+80*7, self.height-90, 300, 200))
+        pygame.draw.rect(screen, (255, 255, 255), (10+80*8, self.height-90, 200, 200))
         self.beginRect = screen.blit(self.begin.image, (self.begin.rect.x, self.begin.rect.y))
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
@@ -284,7 +299,7 @@ class Game(PygameGame):
             self.mode = "levelSelection"
         elif(self.levelCreationRect.collidepoint(pos)):
             self.init(4)
-            self.mode = "levelCreation"
+            self.mode = "levelCreationHelp"
             self.player.row, self.player.col = -10, -10
         elif(self.helpRect.collidepoint(pos)):
             self.mode = "help"
@@ -299,7 +314,7 @@ class Game(PygameGame):
 
         titleSurface = font1.render("Pendo", True, (255, 255, 255))
         titleRect = titleSurface.get_rect()
-        titleRect.center = (self.width//2, self.height//2-100)
+        titleRect.center = (self.width//2, self.height//2-120)
         screen.blit(titleSurface, titleRect)
 
         font2 = self.fonts["splashScreenBoxes"]
@@ -438,6 +453,9 @@ class Game(PygameGame):
                 self.index -= 1
                 self.index = self.index % len(self.data)
 
+        if keyCode == pygame.K_h:
+            self.mode = "levelCreationHelp"
+
 
     def storeInfo(self, info):
         #print(self.board, "self.transmittedInfo: ", info)
@@ -473,9 +491,7 @@ class Game(PygameGame):
                 self.beginImport = False
                 self.beginImport2 = False
 
-                
-
-
+            
 
 
 
@@ -484,13 +500,7 @@ class Game(PygameGame):
         self.playGameMouseDrag(x, y)
 
         if self.controlBar.tileRectList != None:
-            if self.controlBar.tileRectList[7].collidepoint(pos) or self.dragFlag[7]:
-                tile = Cube()
-                self.dragFlag[7] = True
-                pos = (pos[0] - 70 / 2, pos[1] - 44 / 2)
-                self.objectDragged = (tile, pos)
-
-            elif self.controlBar.tileRectList[8].collidepoint(pos) or self.dragFlag[8]:
+            if self.controlBar.tileRectList[8].collidepoint(pos) or self.dragFlag[8]:
                 tile = TargetTile()
                 self.dragFlag[8] = True
                 pos = (pos[0] - 70/2, pos[1]-44/2)
@@ -538,6 +548,10 @@ class Game(PygameGame):
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
         self.saveRect = screen.blit(self.save.image, (self.save.rect.x, self.save.rect.y))
         self.exportRect = screen.blit(self.export.image, (self.export.rect.x, self.export.rect.y))
+
+        font4 = self.fonts["instruction"]
+        helpSurface = font4.render("Press 'h' for help", True, (139, 71, 93))
+        screen.blit(helpSurface, (screen.get_rect().centerx+240, screen.get_rect().centery+150))
 
         for dragFlag in self.dragFlag:
             if dragFlag:
@@ -633,8 +647,43 @@ class Game(PygameGame):
             self.currentTextRect = screen.blit(textSurface, text_rect)
             self.beginImport2 = True
 
+    ########################
+    # levelCreationHelp mode
+    ########################
+    def levelCreationHelpKeyPressed(self, keyCode, uni, modifier):
+        self.mode = "levelCreation"
+    def levelCreationHelpMousePressed(self, x, y):
+        pass
+    def levelCreationHelpTimerFired(self, dt):
+        pass
+    def levelCreationHelpRedrawAll(self, screen):
+        font2 = self.fonts["splashScreenBoxes"]
+
+        levelCreationSurf = font2.render("Level Creation", True, (255, 255, 255), (205,140,149))
+        self.levelCreationRect = levelCreationSurf.get_rect()
+        self.levelCreationRect.center = (self.width//2, 40)
+        screen.blit(levelCreationSurf, self.levelCreationRect)
+
+        font3 = self.fonts["instruction"]
+
+        textSurface0 = font3.render("Notes:", True, (255, 255, 255))
+        screen.blit(textSurface0, ((self.width/2-370, self.height/2-170)))
+
+        textSurface1 = font3.render("~Use your mouse to drag a tile to any empty spot~", True, (255, 255, 255))
+        screen.blit(textSurface1, (self.width/2-370, self.height/2-120))
+
+        textSurface2 = font3.render("~You can save your level by clicking on the save button~", True, (255, 255, 255))
+        screen.blit(textSurface2, (self.width/2-370, self.height/2-70))   
+
+        textSurface3 = font3.render("~You can load a board by clicking on the import button~", True, (255,255,255))
+        screen.blit(textSurface3, (self.width/2-370, self.height/2-20))  
+
+        textSurface4 = font3.render("~ALERT: You can only have one player and one target spot~", True, (255,255,255))
+        screen.blit(textSurface4, (self.width/2-370, self.height/2+30))           
 
 
+        textSurface5 = font3.render("~Press any key to get started~", True, (255,255,255))
+        screen.blit(textSurface5, (self.width/2-370, self.height/2+80))   
 
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
 # I changed the specific image loaded and add the interaction with the player
