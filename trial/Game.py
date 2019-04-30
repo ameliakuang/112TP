@@ -9,6 +9,7 @@ import utility
 import copy
 import random
 import os
+import json
 
 class Game(PygameGame):
     def init(self, level = 0):
@@ -61,9 +62,11 @@ class Game(PygameGame):
         self.beginTexting = False
         self.boardTextBox = TextBox(self.fonts["instruction"])
         self.transmittedInfo = ""
-        self.lCData = dict()
+        self.levelCreated = []
 
-
+        if(os.path.exists("level.txt")):
+            with open(self.levelCreationFile) as f:
+                self.levelCreated = json.load(f)
 
 
     def keyPressed(self, keyCode, uni, modifier):
@@ -428,11 +431,12 @@ class Game(PygameGame):
         
         boardName = info[14:]
         board = self.board
+        self.levelCreated.append([boardName, board])
+        print(self.levelCreated)
         
-        self.lCData[boardName] = board
-        contentsToWrite = "\n" + boardName + ": " + str(board)
-        with open(self.levelCreationFile, "a") as f:
-            f.write(contentsToWrite)
+        with open(self.levelCreationFile, "w") as f:
+            json.dump(self.levelCreated, f)
+
 
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
@@ -444,11 +448,9 @@ class Game(PygameGame):
             self.boardTextBox = TextBox(self.fonts["instruction"])
             self.transmittedInfo = ""
         elif(self.exportRect.collidepoint(pos)):
-            with open(self.levelCreationFile, "rt") as f:
-                contentsRead = f.read()
-            for board in contentsRead.splitlines()[1:]:
-                index = board.index(":")
-                boardName = board[:index]
+            with open(self.levelCreationFile, "rb") as json_file:
+                data = json.load(json_file)
+            print("la", data)
                 
 
 

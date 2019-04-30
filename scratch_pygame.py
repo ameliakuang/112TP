@@ -1,19 +1,11 @@
-# Note: As this requires read-write access to your hard drive,
-#       this will not run in the browser in Brython.
+import json
 
-def readFile(path):
-    with open(path, "rt") as f:
-        return f.read()
+# some JSON:
+x = '{ "name":[1,2]}'
 
-def writeFile(path, contents):
-    with open(path, "wt") as f:
-        f.write(contents)
+# parse x:
+y = json.loads(x)
 
-contentsToWrite = "This is a test!\nIt is only a test!"
-writeFile("foo.txt", contentsToWrite)
+# the result is a Python dictionary:
+print(y["name"])
 
-contentsRead = readFile("foo.txt")
-assert(contentsRead == contentsToWrite)
-
-# "The files are in the computer!"
-print("Open the file foo.txt and verify its contents.")
