@@ -8,6 +8,7 @@ from Control import *
 import utility
 import copy
 import random
+import json
 
 class Game(PygameGame):
     def init(self, level = 0):
@@ -57,11 +58,9 @@ class Game(PygameGame):
 
         #get the texts
         self.beginTexting = False
-        self.idBeginTexting = False
-        self.idTextBox = TextBox(self.fonts["instruction"], True)
-        self.boardBeginTexting = False
-        self.boardTextBox = TextBox(self.fonts["instruction"], False)
+        self.boardTextBox = TextBox(self.fonts["instruction"])
         self.transmittedInfo = ""
+        self.lCData = dict()
 
 
 
@@ -413,31 +412,27 @@ class Game(PygameGame):
             self.scene.state = None
             self.scene = None # clear the winning/losing scene
 
-        if self.idBeginTexting:
+        if self.beginTexting:
             if keyCode == pygame.K_RETURN:
-                self.idBeginTexting = False
-            self.idTextBox.update(keyCode, uni, modifier)
-
-        if self.boardBeginTexting:
-            if keyCode == pygame.K_RETURN:
-                self.boardBeginTexting = False
+                self.beginTexting = False
                 self.transmittedInfo += self.boardTextBox.text
                 self.storeInfo(self.transmittedInfo)
                 #print("self.transmittedInfo: ", self.transmittedInfo)
-                self.idTextBox = None
                 self.boardTextBox = None
             if self.boardTextBox != None:
                 self.boardTextBox.update(keyCode, uni, modifier)
 
     def storeInfo(self, info):
-        #print(self.board, "self.transmittedInfo: ", info)
-        data = dict()
-        data["board"] = self.board
-        indexB = info.index("Board's")
-        indexI = info.index("ID")
-        data["User"] = info[9:indexB-1]
-        data["boardName"] = info[indexB+14:]
-        #print(data)
+        print(self.board, "self.transmittedInfo: ", info)
+        
+        boardName = info[14:]
+        board = self.board
+
+        
+        self.lCData[boardName] = board
+        print(self.lCData)
+
+        #jsonData = json.dumps(data)
 
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
@@ -446,14 +441,9 @@ class Game(PygameGame):
             self.mode = "splashScreen"
         elif(self.saveRect.collidepoint(pos)):
             self.beginTexting = True
-            self.idBeginTexting = True
-            self.idTextBox = TextBox(self.fonts["instruction"], True)
-            self.boardTextBox = TextBox(self.fonts["instruction"], False)
+            self.boardTextBox = TextBox(self.fonts["instruction"])
             self.transmittedInfo = ""
-        elif self.boardTextBox != None and (self.boardTextBox.textRect.collidepoint(pos)):
-            self.transmittedInfo += self.idTextBox.text + " "
-            self.idBeginTexting = False
-            self.boardBeginTexting = True
+
 
 
 
@@ -545,35 +535,24 @@ class Game(PygameGame):
 
         if self.beginTexting and self.boardTextBox != None:
             font = self.fonts["instruction"]
-            textSurface = font.render("~Please enter your User ID and the name of the board:)~", True, (139, 71, 93))
+            textSurface = font.render("~Please enter the name of the board:)~", True, (139, 71, 93))
             textRect = textSurface.get_rect()
             textRect.centerx = screen.get_rect().centerx
             textRect.centery = screen.get_rect().centery-105
             screen.blit(textSurface, textRect)
 
-            textSurface = font.render("~Click on the corresponding text boxes and type~", True, (139, 71, 93))
-            textRect = textSurface.get_rect()
-            textRect.centerx = screen.get_rect().centerx
-            textRect.centery = screen.get_rect().centery - 70
-            screen.blit(textSurface, textRect)
 
             textSurface = font.render("~Hit return to save the information when you are done~", True, (139, 71, 93))
             textRect = textSurface.get_rect()
             textRect.centerx = screen.get_rect().centerx
-            textRect.centery = screen.get_rect().centery-35
+            textRect.centery = screen.get_rect().centery-70
             screen.blit(textSurface, textRect)
 
 
-            self.idTextBox.textRect.x = screen.get_rect().centerx-100
-            self.idTextBox.textRect.y = screen.get_rect().centery
-            self.idTextBox.render(screen, self.idTextBox.textRect.x, self.idTextBox.textRect.y)
-            if self.idBeginTexting:
-                self.idTextBox.render(screen, self.idTextBox.textRect.x, self.idTextBox.textRect.y)
-
             self.boardTextBox.textRect.x = screen.get_rect().centerx-100
-            self.boardTextBox.textRect.y = self.idTextBox.textRect.y + 35
+            self.boardTextBox.textRect.y = screen.get_rect().centery -35
             self.boardTextBox.render(screen, self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)
-            if self.boardBeginTexting:
+            if self.beginTexting:
                 self.boardTextBox.render(screen,self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)
 
 

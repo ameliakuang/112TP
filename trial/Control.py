@@ -50,13 +50,9 @@ class Save(Control):
 
 # Citation: https://stackoverflow.com/questions/46390231/how-to-create-a-text-input-box-with-pygame
 class TextBox(Control):
-    def __init__(self, font, isID):
+    def __init__(self, font):
         pygame.sprite.Sprite.__init__(self)
-        self.isID = isID
-        if self.isID:
-            self.text = "User ID: "
-        else:
-            self.text = "Board's Name: "
+        self.text = "Board's Name: "
         self.font = font
 
         self.textSurf = self.font.render(self.text, True, (205,140,149), (255,255,255))
@@ -64,10 +60,7 @@ class TextBox(Control):
 
     def update(self, keyCode, uni, modifier):
         if keyCode == pygame.K_RETURN:
-            if self.isID:
-                self.text = "User ID: "
-            elif not self.isID:
-                self.text = "Board's Name: "
+            self.text = "Board's Name: "
         elif keyCode == pygame.K_BACKSPACE:
             self.text = self.text[:-1]
         else:
