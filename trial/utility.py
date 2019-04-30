@@ -1,8 +1,8 @@
-def roundHalfUp(d):
-    # Round to nearest with ties going away from zero.
-    import decimal
-    rounding = decimal.ROUND_HALF_UP
-    return int(decimal.Decimal(d).to_integral_value(rounding=rounding))
+# Citation: https://www.cs.cmu.edu/~112/notes/notes-strings.html#basicFileIO
+def readFile(path):
+    with open(path, "w") as f:
+        return f.read()
+
 
 # Citation: http://clintbellanger.net/articles/isometric_math/
 def mapToIso(row, col, cols, halfWidth, halfHeight, screen):

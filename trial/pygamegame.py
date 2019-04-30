@@ -56,6 +56,7 @@ class PygameGame(object):
         pygame.init()
         pygame.mixer.music.load("deep-nature.mp3")
         pygame.mixer.music.set_volume(0.5)
+        self.levelCreationFile = "level.txt"
 
 
 

@@ -8,7 +8,7 @@ from Control import *
 import utility
 import copy
 import random
-import json
+import os
 
 class Game(PygameGame):
     def init(self, level = 0):
@@ -45,6 +45,7 @@ class Game(PygameGame):
         self.exit = Exit(self.width, self.height)
 
         self.save = Save(self.width, self.height)
+        self.export = Export(self.width, self.height)
 
         self.controlBar = controlBar(self.width, self.height)
 
@@ -427,12 +428,11 @@ class Game(PygameGame):
         
         boardName = info[14:]
         board = self.board
-
         
         self.lCData[boardName] = board
-        print(self.lCData)
-
-        #jsonData = json.dumps(data)
+        contentsToWrite = "\n" + boardName + ": " + str(board)
+        with open(self.levelCreationFile, "a") as f:
+            f.write(contentsToWrite)
 
     def levelCreationMousePressed(self, x, y):
         pos = (x,y)
@@ -443,6 +443,14 @@ class Game(PygameGame):
             self.beginTexting = True
             self.boardTextBox = TextBox(self.fonts["instruction"])
             self.transmittedInfo = ""
+        elif(self.exportRect.collidepoint(pos)):
+            with open(self.levelCreationFile, "rt") as f:
+                contentsRead = f.read()
+            for board in contentsRead.splitlines()[1:]:
+                index = board.index(":")
+                boardName = board[:index]
+                
+
 
 
 
@@ -505,6 +513,7 @@ class Game(PygameGame):
         self.resetRect = screen.blit(self.reset.image, (self.reset.rect.x, self.reset.rect.y))
         self.menuRect = screen.blit(self.menu.image, (self.menu.rect.x, self.menu.rect.y))
         self.saveRect = screen.blit(self.save.image, (self.save.rect.x, self.save.rect.y))
+        self.exportRect = screen.blit(self.export.image, (self.export.rect.x, self.export.rect.y))
 
         for dragFlag in self.dragFlag:
             if dragFlag:
@@ -548,9 +557,20 @@ class Game(PygameGame):
             textRect.centery = screen.get_rect().centery-70
             screen.blit(textSurface, textRect)
 
+            textSurface = font.render("~WARNNING: If you use the same name twice,", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery - 35
+            screen.blit(textSurface, textRect)
+
+            textSurface = font.render("I would randomly pick one and display it~", True, (139, 71, 93))
+            textRect = textSurface.get_rect()
+            textRect.centerx = screen.get_rect().centerx
+            textRect.centery = screen.get_rect().centery
+            screen.blit(textSurface, textRect)
 
             self.boardTextBox.textRect.x = screen.get_rect().centerx-100
-            self.boardTextBox.textRect.y = screen.get_rect().centery -35
+            self.boardTextBox.textRect.y = screen.get_rect().centery+35
             self.boardTextBox.render(screen, self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)
             if self.beginTexting:
                 self.boardTextBox.render(screen,self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)

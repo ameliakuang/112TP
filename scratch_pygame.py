@@ -1,24 +1,19 @@
-import pygame
+# Note: As this requires read-write access to your hard drive,
+#       this will not run in the browser in Brython.
 
-pygame.init()
-screen = pygame.display.set_mode((640, 480))
-clock = pygame.time.Clock()
-done = False
+def readFile(path):
+    with open(path, "rt") as f:
+        return f.read()
 
-font = pygame.font.SysFont("copperplatettc", 72)
+def writeFile(path, contents):
+    with open(path, "wt") as f:
+        f.write(contents)
 
-text = font.render("Hello, World", True, (0, 128, 0))
+contentsToWrite = "This is a test!\nIt is only a test!"
+writeFile("foo.txt", contentsToWrite)
 
-while not done:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            done = True
-    
-    screen.fill((255, 255, 255))
-    screen.blit(text,
-        (320 - text.get_width() // 2, 240 - text.get_height() // 2))
-    
-    pygame.display.flip()
-    clock.tick(60)
+contentsRead = readFile("foo.txt")
+assert(contentsRead == contentsToWrite)
+
+# "The files are in the computer!"
+print("Open the file foo.txt and verify its contents.")

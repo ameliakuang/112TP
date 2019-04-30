@@ -43,10 +43,17 @@ class Exit(Control):
 class Save(Control):
     def __init__(self, screenWidth, screenHeight):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('images/icons/save.png').convert_alpha()
+        self.image = pygame.image.load('images/icons/import.png').convert_alpha()
         self.rect = self.image.get_rect()
         #print(self.rect.x, self.rect.y)
         self.rect.x, self.rect.y = 80, -13
+
+class Export(Control):
+    def __init__(self, screenWidth, screenHeight):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('images/icons/export.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = 167, -13
 
 # Citation: https://stackoverflow.com/questions/46390231/how-to-create-a-text-input-box-with-pygame
 class TextBox(Control):
