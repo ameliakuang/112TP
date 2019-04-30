@@ -57,9 +57,12 @@ class Export(Control):
 
 # Citation: https://stackoverflow.com/questions/46390231/how-to-create-a-text-input-box-with-pygame
 class TextBox(Control):
-    def __init__(self, font):
+    def __init__(self, font, isDefault, text = ""):
         pygame.sprite.Sprite.__init__(self)
-        self.text = "Board's Name: "
+        if isDefault:
+            self.text = "Board's Name: "
+        else:
+            self.text = text
         self.font = font
 
         self.textSurf = self.font.render(self.text, True, (205,140,149), (255,255,255))

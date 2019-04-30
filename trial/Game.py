@@ -60,13 +60,17 @@ class Game(PygameGame):
 
         #get the texts
         self.beginTexting = False
-        self.boardTextBox = TextBox(self.fonts["instruction"])
+        self.boardTextBox = TextBox(self.fonts["instruction"], True)
         self.transmittedInfo = ""
         self.levelCreated = []
 
         if(os.path.exists("level.txt")):
             with open(self.levelCreationFile) as f:
                 self.levelCreated = json.load(f)
+        self.data = []
+        self.index = 0
+        self.beginImport = False
+        self.beginImport2 = False
 
 
     def keyPressed(self, keyCode, uni, modifier):
@@ -426,13 +430,21 @@ class Game(PygameGame):
             if self.boardTextBox != None:
                 self.boardTextBox.update(keyCode, uni, modifier)
 
+        if self.beginImport:
+            if keyCode == pygame.K_UP:
+                self.index += 1
+                self.index = self.index % len(self.data)
+            elif keyCode == pygame.K_DOWN:
+                self.index -= 1
+                self.index = self.index % len(self.data)
+
+
     def storeInfo(self, info):
-        print(self.board, "self.transmittedInfo: ", info)
+        #print(self.board, "self.transmittedInfo: ", info)
         
         boardName = info[14:]
         board = self.board
         self.levelCreated.append([boardName, board])
-        print(self.levelCreated)
         
         with open(self.levelCreationFile, "w") as f:
             json.dump(self.levelCreated, f)
@@ -445,11 +457,22 @@ class Game(PygameGame):
             self.mode = "splashScreen"
         elif(self.saveRect.collidepoint(pos)):
             self.beginTexting = True
-            self.boardTextBox = TextBox(self.fonts["instruction"])
+            self.boardTextBox = TextBox(self.fonts["instruction"], True)
             self.transmittedInfo = ""
         elif(self.exportRect.collidepoint(pos)):
             with open(self.levelCreationFile, "rb") as json_file:
-                data = json.load(json_file)
+                self.data = json.load(json_file)
+            self.beginImport = True
+
+        if self.beginImport2:
+            if self.currentTextRect.collidepoint(pos):
+                self.board = self.data[self.index][1]
+                self.beginImport = False
+                self.beginImport2 = False
+            elif self.returnRect.collidepoint(pos):
+                self.beginImport = False
+                self.beginImport2 = False
+
                 
 
 
@@ -576,6 +599,21 @@ class Game(PygameGame):
             if self.beginTexting:
                 self.boardTextBox.render(screen,self.boardTextBox.textRect.x, self.boardTextBox.textRect.y)
 
+        if self.beginImport:
+            font1 = self.fonts["splashScreenBoxes"]
+            font2 = self.fonts["instruction"]
+
+            textSurface = font1.render("Level Creation: Saved Level", True, (255,255,255), (205, 140, 149)) #saved level
+            textRect = textSurface.get_rect()
+            textRect.centerx, textRect.centery = self.width//2, 40
+            screen.blit(textSurface, textRect)
+
+            returnSurface = font1.render("Return", True, (139, 71, 93), (205, 140, 149))
+            self.returnRect = screen.blit(returnSurface, (screen.get_rect().centerx-10, screen.get_rect().centery+50))
+
+            textSurface = font2.render(self.data[self.index][0], True, (139, 71, 93), (255,255,255))
+            self.currentTextRect = screen.blit(textSurface, (screen.get_rect().centerx-10, screen.get_rect().centery))
+            self.beginImport2 = True
 
 
 
