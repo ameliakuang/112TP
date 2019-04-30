@@ -328,31 +328,31 @@ class Game(PygameGame):
         font3 = self.fonts["instruction"]
 
         textSurface0 = font3.render("Instruction:))))", True, (255, 255, 255))
-        screen.blit(textSurface0, ((self.width/2-300, self.height/2-220)))
+        screen.blit(textSurface0, ((self.width/2-350, self.height/2-220)))
 
         textSurface1 = font3.render("~Use your mouse to drag a tile to any empty spot~", True, (255, 255, 255))
-        screen.blit(textSurface1, (self.width/2-300, self.height/2-170))
+        screen.blit(textSurface1, (self.width/2-350, self.height/2-170))
 
         textSurface2 = font3.render("~Build up a path to the target blue spot~", True, (255, 255, 255))
-        screen.blit(textSurface2, (self.width/2-300, self.height/2-120))
+        screen.blit(textSurface2, (self.width/2-350, self.height/2-120))
 
         textSurface3 = font3.render("~Click on the right arrow for the ball to roll~", True, (255, 255, 255))
-        screen.blit(textSurface3, (self.width/2-300, self.height/2-70))
+        screen.blit(textSurface3, (self.width/2-350, self.height/2-70))
 
         textSurface4 = font3.render("~Click on the menu button to go back to Level Selection Page~", True, (255, 255, 255))
-        screen.blit(textSurface4, (self.width/2-300, self.height/2-20)) 
+        screen.blit(textSurface4, (self.width/2-350, self.height/2-20)) 
 
         textSurface5 = font3.render("~Click on the restart button to restart the game~", True, (255, 255, 255))
-        screen.blit(textSurface5, (self.width/2-300, self.height/2+30))  
+        screen.blit(textSurface5, (self.width/2-350, self.height/2+30))  
 
         textSurface6 = font3.render("~Press any key to select a level~", True, (255, 255, 255))
-        screen.blit(textSurface6, (self.width/2-300, self.height/2+80))  
+        screen.blit(textSurface6, (self.width/2-350, self.height/2+80))  
 
         textSurface7 = font3.render("~Click anywhere to go back to the splash screen~", True, (255, 255, 255))
-        screen.blit(textSurface7, (self.width/2-300, self.height/2+130))    
+        screen.blit(textSurface7, (self.width/2-350, self.height/2+130))    
 
         textSurface8 = font3.render("~E~N~J~O~Y~", True, (255, 255, 255))
-        screen.blit(textSurface8, (self.width/2-60, self.height/2+180))  
+        screen.blit(textSurface8, (self.width/2-100, self.height/2+180))  
 
 
 
@@ -450,7 +450,6 @@ class Game(PygameGame):
         elif(self.exportRect.collidepoint(pos)):
             with open(self.levelCreationFile, "rb") as json_file:
                 data = json.load(json_file)
-            print("la", data)
                 
 
 
