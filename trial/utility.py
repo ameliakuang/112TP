@@ -1,7 +1,4 @@
-# Citation: https://www.cs.cmu.edu/~112/notes/notes-strings.html#basicFileIO
-def readFile(path):
-    with open(path, "w") as f:
-        return f.read()
+
 
 
 # Citation: http://clintbellanger.net/articles/isometric_math/

@@ -1,4 +1,3 @@
-# beyond
 import pygame
 from pygamegame import *
 from Board import *
@@ -58,13 +57,14 @@ class Game(PygameGame):
         self.fonts["splashScreenBoxes"] = pygame.font.SysFont("copperplatettc", 50)
         self.fonts["instruction"] = pygame.font.SysFont("avenirnextttc", 27)
 
-        #get the texts
+        # get the texts
         self.beginTexting = False
         self.boardTextBox = TextBox(self.fonts["instruction"], True)
         self.transmittedInfo = ""
         self.levelCreated = []
 
-        if(os.path.exists("level.txt")):
+        # Citation: https://www.cs.cmu.edu/~112/notes/notes-strings.html
+        if(os.path.exists("level.txt")) and os.path.getsize('level.txt') > 0:
             with open(self.levelCreationFile) as f:
                 self.levelCreated = json.load(f)
         self.data = []
@@ -463,7 +463,7 @@ class Game(PygameGame):
         boardName = info[14:]
         board = self.board
         self.levelCreated.append([boardName, board])
-        
+        # Citation: https://www.cs.cmu.edu/~112/notes/notes-strings.html
         with open(self.levelCreationFile, "w") as f:
             json.dump(self.levelCreated, f)
 
