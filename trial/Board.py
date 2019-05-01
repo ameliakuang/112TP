@@ -1,3 +1,4 @@
+# This file sets up the game board with board generation.
 import pygame
 from Tiles import *
 import utility

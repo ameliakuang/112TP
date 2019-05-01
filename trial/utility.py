@@ -1,4 +1,5 @@
-
+# Utility.py
+# This file includes the utility function that every other file could access.
 
 
 # Citation: http://clintbellanger.net/articles/isometric_math/

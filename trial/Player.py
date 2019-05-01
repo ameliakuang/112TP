@@ -1,3 +1,5 @@
+# Player.py
+# This file contains the Player class.
 import pygame
 import utility
 

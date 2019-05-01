@@ -1,3 +1,4 @@
+# This file includes all the control buttons.
 import pygame
 from Player import *
 from Tiles import *

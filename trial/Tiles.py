@@ -1,3 +1,4 @@
+# This file contains the Tile class.
 import pygame
 import utility
 '''

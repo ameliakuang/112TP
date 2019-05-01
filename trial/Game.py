@@ -1,3 +1,5 @@
+# Game.py
+# This is the main game file, which includes all the necessary parts to "play" the game.
 import pygame
 from pygamegame import *
 from Board import *
@@ -653,7 +655,7 @@ class Game(PygameGame):
     def levelCreationHelpKeyPressed(self, keyCode, uni, modifier):
         self.mode = "levelCreation"
     def levelCreationHelpMousePressed(self, x, y):
-        pass
+        self.mode = "splashScreen"
     def levelCreationHelpTimerFired(self, dt):
         pass
     def levelCreationHelpRedrawAll(self, screen):
@@ -686,7 +688,10 @@ class Game(PygameGame):
 
 
         textSurface5 = font3.render("~Press any key to get started~", True, (255,255,255))
-        screen.blit(textSurface5, (self.width/2-370, self.height/2+140))   
+        screen.blit(textSurface5, (self.width/2-370, self.height/2+140))  
+
+        textSurface7 = font3.render("~Click anywhere to go back to the splash screen~", True, (255, 255, 255))
+        screen.blit(textSurface7, (self.width/2-370, self.height/2+190))    
 
 # Citation:https://stackoverflow.com/questions/14700889/pygame-level-menu-states
 # I changed the specific image loaded and add the interaction with the player

@@ -1,5 +1,5 @@
 Citation:
-Image:
+Images:
 The tiles: Thanks to my best friend Catherine Cheng!
 You Win.png, game-over png: https://images.app.goo.gl/GtMdfmrbJS8RbPLZA, https://images.app.goo.gl/ez9eVUJD2sbhGUuN8
 Game icons: https://opengameart.org/content/game-icons
@@ -7,4 +7,5 @@ Game icons: https://opengameart.org/content/game-icons
 
 Code
 Framework: by Lukas Peraza
-The conversion from cartesian coordinates to isometric coordinates (Board.py): 
+The conversion from cartesian coordinates to isometric coordinates (Board.py): http://clintbellanger.net/articles/isometric_math/ 
+Other citations are included in the code.
