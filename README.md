@@ -13,3 +13,6 @@ This project does not require the user to install extra libraries.
 
 ## Shortcut commands:
 This project does not include shortcut commands.
+
+## Video:
+Here's a [video](https://youtu.be/thohVILXu5w) for Pendo.
